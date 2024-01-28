@@ -1,20 +1,29 @@
 [{
-  "signos": [
-    {
-      "nombre": "Punto y coma",
-      "simbolo": ";"
-    },
-    {
-      "nombre": "Paréntesis abierto",
-      "simbolo": "("
-    },
-    {
-      "nombre": "Paréntesis cerrado",
-      "simbolo": ")"
-    },
-    {
-      "nombre": "Asignacíon",
-      "simbolo": "="
-    }
-  ]
-}]
+        "signos": [
+            {
+                "nombre": "Punto y coma",
+                "simbolo": ";",
+                "tipo": "end"
+            },
+            {
+                "nombre": "Coma",
+                "simbolo": ",",
+                "tipo": "separación"
+            },
+            {
+                "nombre": "Paréntesis abierto",
+                "simbolo": "(",
+                "tipo": "inicio"
+            },
+            {
+                "nombre": "Paréntesis cerrado",
+                "simbolo": ")",
+                "tipo": "cierre"
+            },
+            {
+                "nombre": "Asignacíon",
+                "simbolo": "=",
+                "tipo": "Asignación"
+            }
+        ]
+    }]
