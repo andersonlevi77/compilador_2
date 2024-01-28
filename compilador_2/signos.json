@@ -1,0 +1,20 @@
+[{
+  "signos": [
+    {
+      "nombre": "Punto y coma",
+      "simbolo": ";"
+    },
+    {
+      "nombre": "Paréntesis abierto",
+      "simbolo": "("
+    },
+    {
+      "nombre": "Paréntesis cerrado",
+      "simbolo": ")"
+    },
+    {
+      "nombre": "Asignacíon",
+      "simbolo": "="
+    }
+  ]
+}]
