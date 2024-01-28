@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 public class TokensEscaneados {
     public ArrayList<String> separacionTokens(String texto) {
         ArrayList<String> tokens = new ArrayList<>();
-        Pattern pattern = Pattern.compile("[\\w]+|;|=|\\n");
+        Pattern pattern = Pattern.compile("[\\w]+|[;=+-,]+|\\n");
         Matcher matcher = pattern.matcher(texto);
 
         int numeroLinea = 1;
@@ -20,7 +20,7 @@ public class TokensEscaneados {
             if ("\n".equals(token)) {
                 numeroLinea++;
             } else {
-                tokens.add(token + "|" + numeroLinea); // Añade el número de línea al token
+                tokens.add(token + "°" + numeroLinea); // Añade el número de línea al token
             }
         }
         return tokens;

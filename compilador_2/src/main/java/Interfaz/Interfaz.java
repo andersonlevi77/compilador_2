@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -30,14 +31,14 @@ public class Interfaz extends javax.swing.JFrame {
     public Interfaz() {
         initComponents();
         tabla = new DefaultTableModel();
-        String[] titulo = new String[]{"No.Fila", "Nombre", "Simbolo"};
+        String[] titulo = new String[]{"No.Fila", "Nombre", "Simbolo", "Tipo"};
         tabla.setColumnIdentifiers(titulo);
         tblDatos.setModel(tabla);
         tblDatos.setEnabled(false);
     }
 
-    private void agregarDtTabla(int pos, String nombre, String simbolo) {
-        tabla.addRow(new Object[]{pos, nombre, simbolo});
+    private void agregarDtTabla(int pos, String nombre, String simbolo, String tipo) {
+        tabla.addRow(new Object[]{pos, nombre, simbolo, tipo});
     }
 
     private void EstiloJfilechooser() {
@@ -48,7 +49,8 @@ public class Interfaz extends javax.swing.JFrame {
         }
     }
 
-    public void leerJson_TablaSimbolos(String token, int numeroLinea) {
+    public void Buscar_Signos_Operadoder(String token, int numeroLinea) {
+        //Leer archivo JSON
         JSONParser jsonParser = new JSONParser();
         try (FileReader read = new FileReader("signos.json");) {
             // Leer archivo
@@ -77,21 +79,26 @@ public class Interfaz extends javax.swing.JFrame {
     }
 
     private void compararAgregarTabla(String token, JSONObject signo, int NLinea) {
+        //Obtiene el valor de la clave del objeto de signos[]
         String nombre = (String) signo.get("nombre");
         String simbolo = (String) signo.get("simbolo");
+        String tipo = (String) signo.get("tipo");
+        //Si encuentra el simbolo lo agrega en la tabla
         if (token.equalsIgnoreCase(simbolo)) {
-            agregarDtTabla(NLinea, nombre, simbolo);
+            agregarDtTabla(NLinea, nombre, simbolo, tipo);
         }
     }
 
     private void actualizarTabla() {
+        //Obtiene el array de los tokens econtrados
         TokensEscaneados simbolosEsc = new TokensEscaneados();
         ArrayList<String> listaTokens = simbolosEsc.separacionTokens(txtDatos.getText());
+        //Itera sobre cada token y lo separa por cada salto de linea que encuentre
         for (String tokenLinea : listaTokens) {
-            String[] partes = tokenLinea.split("\\|"); // Divide el token y el número de línea
+            String[] partes = tokenLinea.split("\\°"); // Divide el token y el número de línea
             String token = partes[0];
             int numeroLinea = Integer.parseInt(partes[1]);
-            leerJson_TablaSimbolos(token, numeroLinea);
+            Buscar_Signos_Operadoder(token, numeroLinea);
         }
     }
 
