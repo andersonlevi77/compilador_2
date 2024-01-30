@@ -1,5 +1,5 @@
 [{
-        "signos": [
+        "simbolos": [
             {
                 "nombre": "Punto y coma",
                 "simbolo": ";",
@@ -24,6 +24,26 @@
                 "nombre": "Asignacíon",
                 "simbolo": "=",
                 "tipo": "Asignación"
+            },
+            {
+                "nombre": "Suma",
+                "simbolo": "+",
+                "tipo": "Suma"
+            },
+            {
+                "nombre": "Resta",
+                "simbolo": "-",
+                "tipo": "Resta"
+            },
+            {
+                "nombre": "Incremento",
+                "simbolo": "++",
+                "tipo": "Incremento"
+            },
+            {
+                "nombre": "Decrece",
+                "simbolo": "--",
+                "tipo": "Decrece"
             }
         ]
     }]
