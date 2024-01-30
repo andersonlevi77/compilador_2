@@ -8,7 +8,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -37,10 +36,6 @@ public class Interfaz extends javax.swing.JFrame {
         tblDatos.setEnabled(false);
     }
 
-    private void agregarDtTabla(int pos, String nombre, String simbolo, String tipo) {
-        tabla.addRow(new Object[]{pos, nombre, simbolo, tipo});
-    }
-
     private void EstiloJfilechooser() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -49,44 +44,8 @@ public class Interfaz extends javax.swing.JFrame {
         }
     }
 
-    public void Buscar_Signos_Operadoder(String token, int numeroLinea) {
-        //Leer archivo JSON
-        JSONParser jsonParser = new JSONParser();
-        try (FileReader read = new FileReader("signos.json");) {
-            // Leer archivo
-            Object obj = jsonParser.parse(read);
-
-            // Lista de objetos JSON
-            JSONArray listaObjetos = (JSONArray) obj;
-            //System.out.println("JSON: " + listaObjetos);
-
-            // Iterar sobre cada objeto JSON en la lista
-            for (Object item : listaObjetos) {
-                JSONObject jsonObject = (JSONObject) item;
-                JSONArray signosList = (JSONArray) jsonObject.get("signos");
-                for (Object signo : signosList) {
-                    compararAgregarTabla(token, (JSONObject) signo, numeroLinea);
-                }
-            }
-
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        } catch (org.json.simple.parser.ParseException ex) {
-            Logger.getLogger(TokensEscaneados.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    private void compararAgregarTabla(String token, JSONObject signo, int NLinea) {
-        //Obtiene el valor de la clave del objeto de signos[]
-        String nombre = (String) signo.get("nombre");
-        String simbolo = (String) signo.get("simbolo");
-        String tipo = (String) signo.get("tipo");
-        //Si encuentra el simbolo lo agrega en la tabla
-        if (token.equalsIgnoreCase(simbolo)) {
-            agregarDtTabla(NLinea, nombre, simbolo, tipo);
-        }
+    private void agregarDtTabla(int pos, String nombre, String simbolo, String tipo) {
+        tabla.addRow(new Object[]{pos, nombre, simbolo, tipo});
     }
 
     private void actualizarTabla() {
@@ -101,11 +60,52 @@ public class Interfaz extends javax.swing.JFrame {
             Buscar_Signos_Operadoder(token, numeroLinea);
         }
     }
-    
+
+    public void Buscar_Signos_Operadoder(String token, int numeroLinea) {
+        //Leer archivo JSON
+        JSONParser jsonParser = new JSONParser();
+        try (FileReader read = new FileReader("signos.json");) {
+            // Leer archivo JSON
+            Object obj = jsonParser.parse(read);
+
+            // Lista de objetos JSON
+            JSONArray listaObjetos = (JSONArray) obj;
+            //System.out.println("JSON: " + listaObjetos);
+
+            // Iterar sobre cada objeto JSON en la lista
+            for (Object item : listaObjetos) {
+                JSONObject jsonObject = (JSONObject) item;
+                // Obtiene el array de simbolos
+                JSONArray signosList = (JSONArray) jsonObject.get("simbolos");
+                for (Object signo : signosList) {
+                    compararAgregarTabla(token, (JSONObject) signo, numeroLinea);
+                }
+            }
+
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } catch (org.json.simple.parser.ParseException ex) {
+            Logger.getLogger(TokensEscaneados.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void compararAgregarTabla(String token, JSONObject signo, int numeroLinea) {
+        //Obtiene el valor de la clave del objeto de signos[]
+        String nombre = (String) signo.get("nombre");
+        String simbolo = (String) signo.get("simbolo");
+        String tipo = (String) signo.get("tipo");
+        //Si encuentra el simbolo lo agrega en la tabla
+        if (token.equalsIgnoreCase(simbolo)) {
+            agregarDtTabla(numeroLinea, nombre, simbolo, tipo);
+        }
+    }
+
     private void limpiarTabla() {
-    DefaultTableModel modeloTabla = (DefaultTableModel) tblDatos.getModel();
-    modeloTabla.setRowCount(0);
-}
+        DefaultTableModel modeloTabla = (DefaultTableModel) tblDatos.getModel();
+        modeloTabla.setRowCount(0);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -127,7 +127,7 @@ public class Interfaz extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         tblDatos = new javax.swing.JTable();
         btnAnalizar = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btnLimpiar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -226,20 +226,20 @@ public class Interfaz extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setFont(new java.awt.Font("Roboto Medium", 1, 18)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-limpiar-50.png"))); // NOI18N
-        jButton1.setText("Limpiar");
-        jButton1.setBorderPainted(false);
-        jButton1.setContentAreaFilled(false);
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton1.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-limpiar-70.png"))); // NOI18N
-        jButton1.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-limpiar-50.png"))); // NOI18N
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnLimpiar.setFont(new java.awt.Font("Roboto Medium", 1, 18)); // NOI18N
+        btnLimpiar.setForeground(new java.awt.Color(255, 255, 255));
+        btnLimpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-limpiar-50.png"))); // NOI18N
+        btnLimpiar.setText("Limpiar");
+        btnLimpiar.setBorderPainted(false);
+        btnLimpiar.setContentAreaFilled(false);
+        btnLimpiar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnLimpiar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnLimpiar.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-limpiar-70.png"))); // NOI18N
+        btnLimpiar.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-limpiar-50.png"))); // NOI18N
+        btnLimpiar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnLimpiarActionPerformed(evt);
             }
         });
 
@@ -258,7 +258,7 @@ public class Interfaz extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnLimpiar, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btnAnalizar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(54, 54, 54)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -282,9 +282,9 @@ public class Interfaz extends javax.swing.JFrame {
                         .addComponent(btnGuardar))
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -295,7 +295,7 @@ public class Interfaz extends javax.swing.JFrame {
                         .addGap(105, 105, 105)
                         .addComponent(btnAnalizar)
                         .addGap(79, 79, 79)
-                        .addComponent(jButton1)))
+                        .addComponent(btnLimpiar)))
                 .addGap(61, 61, 61))
         );
 
@@ -353,10 +353,10 @@ public class Interfaz extends javax.swing.JFrame {
         actualizarTabla();
     }//GEN-LAST:event_btnAnalizarActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         txtDatos.setText(null);
         limpiarTabla();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnLimpiarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -398,7 +398,7 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JButton btnAbrir;
     private javax.swing.JButton btnAnalizar;
     private javax.swing.JButton btnGuardar;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnLimpiar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

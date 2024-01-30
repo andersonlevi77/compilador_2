@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 public class TokensEscaneados {
     public ArrayList<String> separacionTokens(String texto) {
         ArrayList<String> tokens = new ArrayList<>();
-        Pattern pattern = Pattern.compile("[\\w]+|[;=+-,]+|\\n");
+        Pattern pattern = Pattern.compile("\\+\\+|\\-\\-|[a-zA-Z]+|\\d+|[;=\\+\\-,)(]|\\n");
         Matcher matcher = pattern.matcher(texto);
 
         int numeroLinea = 1;
