@@ -8,8 +8,8 @@ import java.util.regex.Pattern;
  *
  * @author juani
  */
-public class TokensEscaneados {
-    public ArrayList<String> separacionTokens(String texto) {
+public class TokensSimbolos {
+    public ArrayList<String> separacionTokensSimbolos(String texto) {
         ArrayList<String> tokens = new ArrayList<>();
         Pattern pattern = Pattern.compile("\\+\\+|\\-\\-|[a-zA-Z]+|\\d+|[;=\\+\\-,)(]|\\n");
         Matcher matcher = pattern.matcher(texto);

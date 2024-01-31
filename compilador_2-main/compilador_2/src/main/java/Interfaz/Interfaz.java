@@ -1,6 +1,7 @@
 package Interfaz;
 
-import Codigo.TokensEscaneados;
+import Codigo.TokensReservadas;
+import Codigo.TokensSimbolos;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -49,11 +50,24 @@ public class Interfaz extends javax.swing.JFrame {
     }
 
     private void actualizarTabla() {
-        //Obtiene el array de los tokens econtrados
-        TokensEscaneados simbolosEsc = new TokensEscaneados();
-        ArrayList<String> listaTokens = simbolosEsc.separacionTokens(txtDatos.getText());
+        //Obtiene el array de los tokens de simbolos econtrados
+        TokensSimbolos simbolosEsc = new TokensSimbolos();
+        ArrayList<String> listaTokensSimbolos = simbolosEsc.separacionTokensSimbolos(txtDatos.getText());
+
+        //Obtiene el array de los tokens de palabras reservadas econtradas
+        TokensReservadas reservadasEsc = new TokensReservadas();
+        ArrayList<String> listaTokensReservadas = reservadasEsc.separacionTokensReservadas(txtDatos.getText());
+        
         //Itera sobre cada token y lo separa por cada salto de linea que encuentre
-        for (String tokenLinea : listaTokens) {
+        //Palabras reservadas
+        for (String tokenLinea : listaTokensReservadas) {
+            String[] partes = tokenLinea.split("\\°"); // Divide el token y el número de línea
+            String token = partes[0];
+            int numeroLinea = Integer.parseInt(partes[1]);
+            Buscar_Palabras_Reservadas(token, numeroLinea);
+        }
+        //Simbolos
+        for (String tokenLinea : listaTokensSimbolos) {
             String[] partes = tokenLinea.split("\\°"); // Divide el token y el número de línea
             String token = partes[0];
             int numeroLinea = Integer.parseInt(partes[1]);
@@ -78,7 +92,7 @@ public class Interfaz extends javax.swing.JFrame {
                 // Obtiene el array de simbolos
                 JSONArray signosList = (JSONArray) jsonObject.get("simbolos");
                 for (Object signo : signosList) {
-                    compararAgregarTabla(token, (JSONObject) signo, numeroLinea);
+                    compararSimbolosAgregarTabla(token, (JSONObject) signo, numeroLinea);
                 }
             }
 
@@ -87,11 +101,41 @@ public class Interfaz extends javax.swing.JFrame {
         } catch (IOException ex) {
             ex.printStackTrace();
         } catch (org.json.simple.parser.ParseException ex) {
-            Logger.getLogger(TokensEscaneados.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TokensSimbolos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private void compararAgregarTabla(String token, JSONObject signo, int numeroLinea) {
+    public void Buscar_Palabras_Reservadas(String token, int numeroLinea) {
+        //Leer archivo JSON
+        JSONParser jsonParser = new JSONParser();
+        try (FileReader read = new FileReader("reservadas.json");) {
+            // Leer archivo JSON
+            Object obj = jsonParser.parse(read);
+
+            // Lista de objetos JSON
+            JSONArray listaObjetos = (JSONArray) obj;
+            //System.out.println("JSON: " + listaObjetos);
+
+            // Iterar sobre cada objeto JSON en la lista
+            for (Object item : listaObjetos) {
+                JSONObject jsonObject = (JSONObject) item;
+                // Obtiene el array de Palabras Reservadas
+                JSONArray reservadasList = (JSONArray) jsonObject.get("reservadas");
+                for (Object reservada : reservadasList) {
+                    compararReservadasAgregarTabla(token, (JSONObject) reservada, numeroLinea);
+                }
+            }
+
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } catch (org.json.simple.parser.ParseException ex) {
+            Logger.getLogger(TokensSimbolos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void compararSimbolosAgregarTabla(String token, JSONObject signo, int numeroLinea) {
         //Obtiene el valor de la clave del objeto de signos[]
         String nombre = (String) signo.get("nombre");
         String simbolo = (String) signo.get("simbolo");
@@ -99,6 +143,17 @@ public class Interfaz extends javax.swing.JFrame {
         //Si encuentra el simbolo lo agrega en la tabla
         if (token.equalsIgnoreCase(simbolo)) {
             agregarDtTabla(numeroLinea, nombre, simbolo, tipo);
+        }
+    }
+
+    private void compararReservadasAgregarTabla(String token, JSONObject signo, int numeroLinea) {
+        //Obtiene el valor de la clave del objeto de reservadas[]
+        String nombre = (String) signo.get("nombre");
+        String palabra = (String) signo.get("palabra");
+        String tipo = (String) signo.get("tipo");
+        //Si encuentra la palabra lo agrega en la tabla
+        if (token.equalsIgnoreCase(palabra)) {
+            agregarDtTabla(numeroLinea, nombre, palabra, tipo);
         }
     }
 
