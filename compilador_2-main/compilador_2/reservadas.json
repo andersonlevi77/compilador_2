@@ -1,0 +1,15 @@
+[{
+        "reservadas": [
+            {
+                "nombre": "importar",
+                "palabra": "import",
+                "tipo": "reservada"
+            },
+            {
+                "nombre": "integer",
+                "palabra": "int",
+                "tipo": "entero"
+            }
+        ]
+    }]
+
