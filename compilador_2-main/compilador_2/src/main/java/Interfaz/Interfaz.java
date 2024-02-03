@@ -1,7 +1,6 @@
 package Interfaz;
 
-import Codigo.TokensReservadas;
-import Codigo.TokensSimbolos;
+import Codigo.Tokens;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -31,7 +30,7 @@ public class Interfaz extends javax.swing.JFrame {
     public Interfaz() {
         initComponents();
         tabla = new DefaultTableModel();
-        String[] titulo = new String[]{"No.Fila", "Nombre", "Simbolo", "Tipo"};
+        String[] titulo = new String[]{"No.Fila", "No.Columna", "Nombre", "Simbolo", "Tipo"};
         tabla.setColumnIdentifiers(titulo);
         tblDatos.setModel(tabla);
         tblDatos.setEnabled(false);
@@ -45,37 +44,28 @@ public class Interfaz extends javax.swing.JFrame {
         }
     }
 
-    private void agregarDtTabla(int pos, String nombre, String simbolo, String tipo) {
-        tabla.addRow(new Object[]{pos, nombre, simbolo, tipo});
+    private void agregarDtTabla(int pos, int col, String nombre, String simbolo, String tipo) {
+        tabla.addRow(new Object[]{pos, col, nombre, simbolo, tipo});
     }
 
     private void actualizarTabla() {
-        //Obtiene el array de los tokens de simbolos econtrados
-        TokensSimbolos simbolosEsc = new TokensSimbolos();
-        ArrayList<String> listaTokensSimbolos = simbolosEsc.separacionTokensSimbolos(txtDatos.getText());
+        //Obtiene el array de los tokens econtrados
+        Tokens reservadasEsc = new Tokens();
+        ArrayList<String> listaTokens = reservadasEsc.separacionTokens(txtDatos.getText());
+        System.out.println("tk: " + listaTokens);
 
-        //Obtiene el array de los tokens de palabras reservadas econtradas
-        TokensReservadas reservadasEsc = new TokensReservadas();
-        ArrayList<String> listaTokensReservadas = reservadasEsc.separacionTokensReservadas(txtDatos.getText());
-        
         //Itera sobre cada token y lo separa por cada salto de linea que encuentre
-        //Palabras reservadas
-        for (String tokenLinea : listaTokensReservadas) {
-            String[] partes = tokenLinea.split("\\°"); // Divide el token y el número de línea
+        for (String tokenLinea : listaTokens) {
+            String[] partes = tokenLinea.split("\\°|\\¬"); // Divide el token y el número de línea
             String token = partes[0];
             int numeroLinea = Integer.parseInt(partes[1]);
-            Buscar_Palabras_Reservadas(token, numeroLinea);
-        }
-        //Simbolos
-        for (String tokenLinea : listaTokensSimbolos) {
-            String[] partes = tokenLinea.split("\\°"); // Divide el token y el número de línea
-            String token = partes[0];
-            int numeroLinea = Integer.parseInt(partes[1]);
-            Buscar_Signos_Operadoder(token, numeroLinea);
+            int numeroColumna = Integer.parseInt(partes[2]);
+            Buscar_Palabras_Reservadas(token, numeroLinea, numeroColumna);
+            Buscar_Simbolos_Operadores(token, numeroLinea, numeroColumna);
         }
     }
 
-    public void Buscar_Signos_Operadoder(String token, int numeroLinea) {
+    public void Buscar_Simbolos_Operadores(String token, int numeroLinea, int numeroColumna) {
         //Leer archivo JSON
         JSONParser jsonParser = new JSONParser();
         try (FileReader read = new FileReader("signos.json");) {
@@ -92,7 +82,15 @@ public class Interfaz extends javax.swing.JFrame {
                 // Obtiene el array de simbolos
                 JSONArray signosList = (JSONArray) jsonObject.get("simbolos");
                 for (Object signo : signosList) {
-                    compararSimbolosAgregarTabla(token, (JSONObject) signo, numeroLinea);
+                    JSONObject simbolo = (JSONObject) signo;
+                    //Obtiene el valor de la clave del objeto de simbolos: []
+                    String nombre = (String) simbolo.get("nombre");
+                    String simb = (String) simbolo.get("simbolo");
+                    String tipo = (String) simbolo.get("tipo");
+                    //Si encuentra el simbolo en el JSON lo agrega en la tabla
+                    if (token.equalsIgnoreCase(simb)) {
+                        agregarDtTabla(numeroLinea, numeroColumna, nombre, simb, tipo);
+                    }
                 }
             }
 
@@ -101,11 +99,11 @@ public class Interfaz extends javax.swing.JFrame {
         } catch (IOException ex) {
             ex.printStackTrace();
         } catch (org.json.simple.parser.ParseException ex) {
-            Logger.getLogger(TokensSimbolos.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Tokens.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public void Buscar_Palabras_Reservadas(String token, int numeroLinea) {
+    public void Buscar_Palabras_Reservadas(String token, int numeroLinea, int numeroColumna) {
         //Leer archivo JSON
         JSONParser jsonParser = new JSONParser();
         try (FileReader read = new FileReader("reservadas.json");) {
@@ -121,8 +119,27 @@ public class Interfaz extends javax.swing.JFrame {
                 JSONObject jsonObject = (JSONObject) item;
                 // Obtiene el array de Palabras Reservadas
                 JSONArray reservadasList = (JSONArray) jsonObject.get("reservadas");
+                //Itera en cada objeto de reservadas: []
                 for (Object reservada : reservadasList) {
-                    compararReservadasAgregarTabla(token, (JSONObject) reservada, numeroLinea);
+                    JSONObject palabra = (JSONObject) reservada;
+                    //Obtiene el valor de la clave del objeto de signos[]
+                    String nombre = (String) palabra.get("nombre");
+                    String palb = (String) palabra.get("palabra");
+                    String tipo = (String) palabra.get("tipo");
+                    //Si encuentra el simbolo que este en el JSON lo agrega en la tabla
+                    if (token.equalsIgnoreCase(palb)) {
+                        agregarDtTabla(numeroLinea, numeroColumna, nombre, palb, tipo);
+                    } 
+                    //Comprueba si hay numeros
+                    else if (token.matches("[0-9.]+")) {
+                        agregarDtTabla(numeroLinea, numeroColumna, "Numero", token, "Valor");
+                        break;
+                    } 
+                    //Comprueba los identificadores
+                    else if (token.matches("[a-zA-Z]+\\d*")) {
+                        agregarDtTabla(numeroLinea, numeroColumna, "Identificador", token, "Identi");
+                        break;
+                    }
                 }
             }
 
@@ -131,29 +148,7 @@ public class Interfaz extends javax.swing.JFrame {
         } catch (IOException ex) {
             ex.printStackTrace();
         } catch (org.json.simple.parser.ParseException ex) {
-            Logger.getLogger(TokensSimbolos.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    private void compararSimbolosAgregarTabla(String token, JSONObject signo, int numeroLinea) {
-        //Obtiene el valor de la clave del objeto de signos[]
-        String nombre = (String) signo.get("nombre");
-        String simbolo = (String) signo.get("simbolo");
-        String tipo = (String) signo.get("tipo");
-        //Si encuentra el simbolo lo agrega en la tabla
-        if (token.equalsIgnoreCase(simbolo)) {
-            agregarDtTabla(numeroLinea, nombre, simbolo, tipo);
-        }
-    }
-
-    private void compararReservadasAgregarTabla(String token, JSONObject signo, int numeroLinea) {
-        //Obtiene el valor de la clave del objeto de reservadas[]
-        String nombre = (String) signo.get("nombre");
-        String palabra = (String) signo.get("palabra");
-        String tipo = (String) signo.get("tipo");
-        //Si encuentra la palabra lo agrega en la tabla
-        if (token.equalsIgnoreCase(palabra)) {
-            agregarDtTabla(numeroLinea, nombre, palabra, tipo);
+            Logger.getLogger(Tokens.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
