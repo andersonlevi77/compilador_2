@@ -12,9 +12,8 @@ public class Tokens {
 
     public ArrayList<String> separacionTokens(String texto) {
         ArrayList<String> tokens = new ArrayList<>();
-        // Incluye patrones para identificadores (letras y números, comenzando con una letra),
-        // números, palabras reservadas específicas, y símbolos.
-        Pattern pattern = Pattern.compile("[a-zA-Z]+\\d*|[0-9.]+|\\;|\\=|\\+\\+|\\-\\-|\\+|\\-|\\n+");
+        // Actualiza el patrón para incluir los saltos de línea en el manejo de tokens
+        Pattern pattern = Pattern.compile("//[^\\n]*|/\\*.*?\\*/|\\n+|[a-zA-Z]+\\d*|[0-9.]+|\\;|\\=|\\+\\+|\\-\\-|\\+|\\-|\\)|\\(", Pattern.DOTALL);
         Matcher matcher = pattern.matcher(texto);
 
         int numeroLinea = 1;
@@ -22,15 +21,26 @@ public class Tokens {
 
         while (matcher.find()) {
             String token = matcher.group();
-            // Calcula la columna como la posición de inicio del matcher menos el inicio de la línea actual.
+
+            // Ignora los comentarios para añadirlos al array
+            if (token.startsWith("//") || token.startsWith("/*")) {
+                // Ajusta el número de línea para comentarios de bloque que contienen saltos de línea
+                if (token.startsWith("/*")) {
+                    numeroLinea += token.split("\n", -1).length - 1;
+                }
+                continue; // No agregar comentarios al array
+            }
+
+            // Ajuste específico para saltos de línea
+            if (token.matches("\\n+")) {
+                numeroLinea += token.length(); // Cuenta cada salto de línea individualmente
+                inicioLinea = matcher.end(); // Ajusta el inicio de la línea después de los saltos de línea
+                continue; // No añade saltos de línea al array de tokens
+            }
+
+            // Calcula la columna como la posición de inicio del matcher menos el inicio de la línea actual
             int columna = matcher.start() - inicioLinea + 1;
             tokens.add(token + "°" + numeroLinea + "¬" + columna);
-
-            // Si el token es un salto de línea, actualiza el número de línea y el inicio de la línea.
-            if (token.equals("\n")) {
-                numeroLinea++;
-                inicioLinea = matcher.end();
-            }
         }
 
         return tokens;
