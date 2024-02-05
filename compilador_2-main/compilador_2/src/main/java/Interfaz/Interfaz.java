@@ -1,6 +1,7 @@
 package Interfaz;
 
 import Codigo.Tokens;
+import Codigo.FiltroArchivos;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -29,6 +30,8 @@ public class Interfaz extends javax.swing.JFrame {
 
     public Interfaz() {
         initComponents();
+        this.setLocationRelativeTo(null);
+        this.setTitle("Compilador");
         tabla = new DefaultTableModel();
         String[] titulo = new String[]{"No.Fila", "No.Columna", "Nombre", "Simbolo", "Tipo"};
         tabla.setColumnIdentifiers(titulo);
@@ -129,13 +132,11 @@ public class Interfaz extends javax.swing.JFrame {
                     //Si encuentra el simbolo que este en el JSON lo agrega en la tabla
                     if (token.equalsIgnoreCase(palb)) {
                         agregarDtTabla(numeroLinea, numeroColumna, nombre, palb, tipo);
-                    } 
-                    //Comprueba si hay numeros
+                    } //Comprueba si hay numeros
                     else if (token.matches("[0-9.]+")) {
                         agregarDtTabla(numeroLinea, numeroColumna, "Numero", token, "Valor");
                         break;
-                    } 
-                    //Comprueba los identificadores
+                    } //Comprueba los identificadores
                     else if (token.matches("[a-zA-Z]+\\d*")) {
                         agregarDtTabla(numeroLinea, numeroColumna, "Identificador", token, "Identi");
                         break;
@@ -366,6 +367,10 @@ public class Interfaz extends javax.swing.JFrame {
     private void btnAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbrirActionPerformed
         EstiloJfilechooser();
         JFileChooser chooser = new JFileChooser();
+        //Filtro para buscar archivos
+        chooser.setFileFilter(new FiltroArchivos(".java", "Archivo java"));
+        chooser.setFileFilter(new FiltroArchivos(".chalk", "CHALK"));
+        
         chooser.showOpenDialog(null);
         File archivo = new File(chooser.getSelectedFile().getAbsolutePath());
 
@@ -383,12 +388,16 @@ public class Interfaz extends javax.swing.JFrame {
         // Crea un JFileChooser para seleccionar dónde guardar el archivo.
         EstiloJfilechooser();
         JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Guardar");
+        //Filtro extensión propia
+        fileChooser.setFileFilter(new FiltroArchivos(".chalk", "CHALK"));
+        
         int selection = fileChooser.showSaveDialog(null);
 
         if (selection == JFileChooser.APPROVE_OPTION) {
             java.io.File fileToSave = fileChooser.getSelectedFile();
 
-            try (FileWriter fileWriter = new FileWriter(fileToSave)) {
+            try (FileWriter fileWriter = new FileWriter(fileToSave + ".chalk")) {
                 fileWriter.write(txtDatos.getText());
                 JOptionPane.showMessageDialog(null, "El archivo se ha guardado correctamente!");
             } catch (IOException e) {
