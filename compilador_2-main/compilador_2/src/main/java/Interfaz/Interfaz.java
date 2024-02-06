@@ -51,11 +51,16 @@ public class Interfaz extends javax.swing.JFrame {
         tabla.addRow(new Object[]{pos, col, nombre, simbolo, tipo});
     }
 
+    private void limpiarTabla() {
+        DefaultTableModel modeloTabla = (DefaultTableModel) tblDatos.getModel();
+        modeloTabla.setRowCount(0);
+    }
+
     private void actualizarTabla() {
         //Obtiene el array de los tokens econtrados
         Tokens reservadasEsc = new Tokens();
         ArrayList<String> listaTokens = reservadasEsc.separacionTokens(txtDatos.getText());
-        System.out.println("tk: " + listaTokens);
+        System.out.println("tk: " + listaTokens); //imprimir listaTokens
 
         //Itera sobre cada token y lo separa por cada salto de linea que encuentre
         for (String tokenLinea : listaTokens) {
@@ -107,40 +112,41 @@ public class Interfaz extends javax.swing.JFrame {
     }
 
     public void Buscar_Palabras_Reservadas(String token, int numeroLinea, int numeroColumna) {
-        //Leer archivo JSON
+        boolean encontrado = false; // Bandera para marcar si se encontró el token
+
+        // Leer archivo JSON
         JSONParser jsonParser = new JSONParser();
-        try (FileReader read = new FileReader("reservadas.json");) {
+        try (FileReader read = new FileReader("reservadas.json")) {
             // Leer archivo JSON
             Object obj = jsonParser.parse(read);
-
-            // Lista de objetos JSON
             JSONArray listaObjetos = (JSONArray) obj;
-            //System.out.println("JSON: " + listaObjetos);
 
             // Iterar sobre cada objeto JSON en la lista
             for (Object item : listaObjetos) {
                 JSONObject jsonObject = (JSONObject) item;
-                // Obtiene el array de Palabras Reservadas
                 JSONArray reservadasList = (JSONArray) jsonObject.get("reservadas");
-                //Itera en cada objeto de reservadas: []
+
                 for (Object reservada : reservadasList) {
                     JSONObject palabra = (JSONObject) reservada;
-                    //Obtiene el valor de la clave del objeto de signos[]
                     String nombre = (String) palabra.get("nombre");
                     String palb = (String) palabra.get("palabra");
                     String tipo = (String) palabra.get("tipo");
-                    //Si encuentra el simbolo que este en el JSON lo agrega en la tabla
+
                     if (token.equalsIgnoreCase(palb)) {
                         agregarDtTabla(numeroLinea, numeroColumna, nombre, palb, tipo);
-                    } //Comprueba si hay numeros
-                    else if (token.matches("[0-9.]+")) {
-                        agregarDtTabla(numeroLinea, numeroColumna, "Numero", token, "Valor");
-                        break;
-                    } //Comprueba los identificadores
-                    else if (token.matches("[a-zA-Z]+\\d*")) {
-                        agregarDtTabla(numeroLinea, numeroColumna, "Identificador", token, "Identi");
+                        encontrado = true; // Marca como encontrado
                         break;
                     }
+                }
+            }
+            // Si después el token no fue encontrado, se maneja como identificador o como número
+            if (!encontrado) {
+                //Números
+                if (token.matches("\\d+(\\.\\d+)?")) {
+                    agregarDtTabla(numeroLinea, numeroColumna, "Numero", token, "Valor");
+                } else if(token.matches("[a-zA-Z][a-zA-Z0-9_$]*")) {
+                    //Identificadores
+                    agregarDtTabla(numeroLinea, numeroColumna, "Identificador", token, "Identi");
                 }
             }
 
@@ -151,11 +157,6 @@ public class Interfaz extends javax.swing.JFrame {
         } catch (org.json.simple.parser.ParseException ex) {
             Logger.getLogger(Tokens.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    private void limpiarTabla() {
-        DefaultTableModel modeloTabla = (DefaultTableModel) tblDatos.getModel();
-        modeloTabla.setRowCount(0);
     }
 
     /**
@@ -305,22 +306,23 @@ public class Interfaz extends javax.swing.JFrame {
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(171, 171, 171))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnLimpiar, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnAnalizar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(54, 54, 54)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(64, 64, 64))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(51, 51, 51)
-                .addComponent(btnAbrir)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(119, 119, 119)
-                .addComponent(btnGuardar)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(37, 37, 37)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnLimpiar, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnAnalizar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(29, 29, 29)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(51, 51, 51)
+                        .addComponent(btnAbrir)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel1)
+                        .addGap(119, 119, 119)
+                        .addComponent(btnGuardar)))
                 .addGap(43, 43, 43))
         );
         jPanel1Layout.setVerticalGroup(
@@ -370,7 +372,7 @@ public class Interfaz extends javax.swing.JFrame {
         //Filtro para buscar archivos
         chooser.setFileFilter(new FiltroArchivos(".java", "Archivo java"));
         chooser.setFileFilter(new FiltroArchivos(".chalk", "CHALK"));
-        
+
         chooser.showOpenDialog(null);
         File archivo = new File(chooser.getSelectedFile().getAbsolutePath());
 
@@ -391,7 +393,7 @@ public class Interfaz extends javax.swing.JFrame {
         fileChooser.setDialogTitle("Guardar");
         //Filtro extensión propia
         fileChooser.setFileFilter(new FiltroArchivos(".chalk", "CHALK"));
-        
+
         int selection = fileChooser.showSaveDialog(null);
 
         if (selection == JFileChooser.APPROVE_OPTION) {
