@@ -3,7 +3,7 @@
             {
                 "nombre": "Punto y coma",
                 "simbolo": ";",
-                "tipo": "end"
+                "tipo": "signo"
             },
             {
                 "nombre": "Coma",
@@ -34,6 +34,16 @@
                 "nombre": "Resta",
                 "simbolo": "-",
                 "tipo": "Resta"
+            },
+            {
+                "nombre": "Mayor",
+                "simbolo": ">",
+                "tipo": "Mayor"
+            },
+            {
+                "nombre": "Menor",
+                "simbolo": "<",
+                "tipo": "Menor"
             },
             {
                 "nombre": "Incremento",
