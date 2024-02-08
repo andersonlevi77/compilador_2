@@ -13,7 +13,7 @@ public class Tokens {
     public ArrayList<String> separacionTokens(String texto) {
         ArrayList<String> tokens = new ArrayList<>();
         // Actualiza el patrón para incluir los saltos de línea en el manejo de tokens
-        Pattern pattern = Pattern.compile("//[^\\n]*|/\\*.*?\\*/|\\n+|[a-zA-Z][a-zA-Z0-9_$]*|\\d+(\\.\\d+)?|\\;|\\=|\\+\\+|\\-\\-|\\+|\\-|\\)|\\(",Pattern.DOTALL);
+        Pattern pattern = Pattern.compile("//[^\\n]*|/\\*.*?\\*/|\\n+|[a-zA-Z][a-zA-Z0-9_$]*|\\d+(\\.\\d+)?|\\;|\\=|\\+\\+|\\-\\-|\\+|\\-|\\)|\\(|\\>|\\<|\\,",Pattern.DOTALL);
         Matcher matcher = pattern.matcher(texto);
         
         int numeroLinea = 1;
