@@ -1,0 +1,29 @@
+[{
+        "reservadas": [
+            {
+                "nombre": "integer",
+                "palabra": "int",
+                "tipo": "entero"
+            },
+            {
+                "nombre": "double",
+                "palabra": "double",
+                "tipo": "decimal"
+            },
+            {
+                "nombre": "flotante",
+                "palabra": "float",
+                "tipo": "decimal"
+            },
+            {
+                "nombre": "double",
+                "palabra": "double",
+                "tipo": "decimal"
+            },
+            {
+                "nombre": "importar",
+                "palabra": "import",
+                "tipo": "reservada"
+            }
+        ]
+    }]
