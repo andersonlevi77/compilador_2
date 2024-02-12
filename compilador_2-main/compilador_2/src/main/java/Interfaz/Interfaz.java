@@ -159,7 +159,7 @@ public class Interfaz extends javax.swing.JFrame {
         }
     }
 
-    public void mostrarTokens() {
+    private void mostrarTokens() {
         String tokens = "";
         //Itera en cada fila de la tabla
         for (int i = 0; i < tabla.getRowCount(); i++) {
@@ -167,7 +167,7 @@ public class Interfaz extends javax.swing.JFrame {
             String simbolo = tabla.getValueAt(i, 3).toString();
             String tipo = tabla.getValueAt(i, 4).toString();
             
-            //Identifica ciertos simbolos para agregarle los '' para que no se confunda con la simbologia del token
+            //Identifica ciertos simbolos para agregarle los '' para que no se confunda con el formato del token
             if (simbolo.matches("\\>|\\<|\\,")) {
                 String newSimb = "'" + simbolo + "'";
                 tokens += "<" + tipo + " , " + newSimb + ">";
@@ -176,7 +176,7 @@ public class Interfaz extends javax.swing.JFrame {
 
             }
         }
-        //Coloca los token con su respectiva simbologia
+        //Coloca los token con su respectivo formato
         txtTokens.setText(tokens);
     }
 
