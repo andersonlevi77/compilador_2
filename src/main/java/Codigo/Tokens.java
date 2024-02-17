@@ -50,7 +50,7 @@ public class Tokens {
             int columna = matcher.start() - inicioLinea + 1;
             tokens.add(token + "°" + numeroLinea + "¬" + columna);
         }
-        //envia los tokens
+        //Envia los tokens
         return tokens;
     }
 }
