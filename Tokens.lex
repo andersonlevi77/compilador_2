@@ -1,1 +1,0 @@
-<Estructura de control , for><inicio , (><entero , int><Id , i><cierre , )>
