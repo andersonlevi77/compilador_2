@@ -1,0 +1,59 @@
+[{
+        "simbolos": [
+            {
+                "nombre": "Punto y coma",
+                "simbolo": ";",
+                "tipo": "signo"
+            },
+            {
+                "nombre": "Coma",
+                "simbolo": ",",
+                "tipo": "separación"
+            },
+            {
+                "nombre": "Paréntesis abierto",
+                "simbolo": "(",
+                "tipo": "inicio"
+            },
+            {
+                "nombre": "Paréntesis cerrado",
+                "simbolo": ")",
+                "tipo": "cierre"
+            },
+            {
+                "nombre": "Asignacíon",
+                "simbolo": "=",
+                "tipo": "Asignación"
+            },
+            {
+                "nombre": "Suma",
+                "simbolo": "+",
+                "tipo": "Suma"
+            },
+            {
+                "nombre": "Resta",
+                "simbolo": "-",
+                "tipo": "Resta"
+            },
+            {
+                "nombre": "Mayor",
+                "simbolo": ">",
+                "tipo": "Mayor"
+            },
+            {
+                "nombre": "Menor",
+                "simbolo": "<",
+                "tipo": "Menor"
+            },
+            {
+                "nombre": "Incremento",
+                "simbolo": "++",
+                "tipo": "Incremento"
+            },
+            {
+                "nombre": "Decrece",
+                "simbolo": "--",
+                "tipo": "Decrece"
+            }
+        ]
+    }]

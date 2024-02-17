@@ -1,0 +1,1 @@
+<entero , int><Id , x><Asignación , =><Valor , 3><signo , ;><decimal , double><Id , y><Asignación , =><Valor , 2.4><signo , ;><Id , boolean><Id , d><Asignación , =><Valor , 3><Mayor , '>'><Valor , 4><signo , ;>
