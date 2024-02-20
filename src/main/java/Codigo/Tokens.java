@@ -17,14 +17,14 @@ public class Tokens {
         Pattern pattern = Pattern.compile(
                 //comentarios y saltos de línea
                 "//[^\\n]*|/\\*.*?\\*/|\\n+"
-                //combinación de palabras
-                + "|[a-zA-Z][a-zA-Z0-9_$]*"
+                //combinación de caracteres
+                + "|[#?]?\\d*[a-zA-Z_$][\\w$]*[#?]*"
                 //combinación de números
                 + "|-?\\d+(\\.\\d+)*\\.?"
                 //símbolos
                 + "|\\;|\\=|\\+\\+|\\-\\-|\\+|\\-|\\)|\\(|\\>|\\<|\\,", Pattern.DOTALL);
         Matcher matcher = pattern.matcher(texto);
-        
+
         int numeroLinea = 1;
         int inicioLinea = 0;
         while (matcher.find()) {
