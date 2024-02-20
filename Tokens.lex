@@ -1,1 +1,1 @@
-<entero , int><reservada , if><Id , x><Asignación , =><Valor , 3><signo , ;>
+<entero , int><Id , x><Asignación , =><Valor , 0><signo , ;>
