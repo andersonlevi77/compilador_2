@@ -29,6 +29,8 @@ import org.json.simple.parser.JSONParser;
 public class Interfaz extends javax.swing.JFrame {
 
     DefaultTableModel tabla;
+    private String tokenAnterior = null;
+    private int lineaTokenAnterior = -1;
 
     public Interfaz() {
         initComponents();
@@ -82,7 +84,7 @@ public class Interfaz extends javax.swing.JFrame {
                     //Identificadores no validos
                     + "|(^\\d\\w+)|^[#?]\\w+|\\w+[#?]+")) {
 
-                throw new tokensNoPermitidos("<html> <b>"+token + "</b> no es valido, linea: " + numeroLinea+"</html>");
+                throw new tokensNoPermitidos("<html> <b>" + token + "</b> no es valido, linea: " + numeroLinea + "</html>");
             }
 
             Buscar_Palabras_Reservadas(token, numeroLinea, numeroColumna);
@@ -128,7 +130,6 @@ public class Interfaz extends javax.swing.JFrame {
         }
     }
 
-    
     public void Buscar_Palabras_Reservadas(String token, int numeroLinea, int numeroColumna) throws tokensNoPermitidos {
         boolean encontrado = false; // Bandera para marcar si se encontró el token
         // Leer archivo JSON
@@ -152,12 +153,22 @@ public class Interfaz extends javax.swing.JFrame {
                     if (token.equals(palb)) {
                         agregarDtTabla(numeroLinea, numeroColumna, nombre, palb, tipo);
                         encontrado = true; // Marca como encontrado
+                        
+                        // Comprobar si la palabra reservada actual es consecutiva a otra en la misma línea
+                        if (tokenAnterior != null && lineaTokenAnterior == numeroLinea) {
+                            throw new tokensNoPermitidos("No se permiten dos palabras reservadas consecutivas en la misma línea: " + numeroLinea);
+                        }
+                        tokenAnterior = token; // Actualiza el token anterior
+                        lineaTokenAnterior = numeroLinea; // Actualiza el numero de linea del token anterior
                         break;
                     }
                 }
+                if (encontrado) {
+                    break; //Sale del ciclo si se encuentra la palabra reservada
+                }
             }
 
-            // Si después el token no fue encontrado, se maneja como identificador o como número
+            // Si después el token no fue encontrado, se maneja como identificador, número o cadena de texto
             if (!encontrado) {
                 //Números
                 if (token.matches("-?\\b\\d+(\\.\\d+)?\\b")) {
@@ -165,9 +176,16 @@ public class Interfaz extends javax.swing.JFrame {
                 } else if (token.matches("[a-zA-Z][a-zA-Z0-9_$]*")) {
                     //Identificadores
                     agregarDtTabla(numeroLinea, numeroColumna, "Identificador", token, "Id");
+                } else if (token.matches("\"[^\\\"]*\"")) {
+                    agregarDtTabla(numeroLinea, numeroColumna, "Cadena de texto", token, "String");
                 }
             }
 
+            // Resetea tokenAnterior si hay un salto de linea
+            if (numeroLinea != lineaTokenAnterior) {
+                tokenAnterior = null;
+            }
+            
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {
@@ -482,6 +500,10 @@ public class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnAnalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnalizarActionPerformed
+        //Reset de variables
+        tokenAnterior = null;
+        lineaTokenAnterior = -1;
+        
         tabla.setRowCount(0);
         try {
             actualizarTabla();
