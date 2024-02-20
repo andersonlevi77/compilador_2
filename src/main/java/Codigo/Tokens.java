@@ -17,6 +17,8 @@ public class Tokens {
         Pattern pattern = Pattern.compile(
                 //comentarios y saltos de línea
                 "//[^\\n]*|/\\*.*?\\*/|\\n+"
+                //Cadenas de Texto
+                + "|\"[^\\\"]*\""
                 //combinación de caracteres
                 + "|[#?]?\\d*[a-zA-Z_$][\\w$]*[#?]*"
                 //combinación de números
