@@ -74,12 +74,17 @@ public class Interfaz extends javax.swing.JFrame {
             String token = partes[0];
             int numeroLinea = Integer.parseInt(partes[1]);
             int numeroColumna = Integer.parseInt(partes[2]);
-            
-            //detecta el token no valido y lanza la excepcion creada
-            if (token.matches("-?\\d+\\.(?:\\d+\\.+)+|\\d+\\.+")) {
-                throw new tokensNoPermitidos("El " + token + " no es valido, linea: " + numeroLinea);
+
+            //Identifica posibles excepciones
+            if (token.matches(
+                    //Números no validos
+                    "(?:\\d+\\.\\d+)(?:\\.\\d+)+|\\d+\\.$"
+                    //Identificadores no validos
+                    + "|(^\\d\\w+)|^[#?]\\w+|\\w+[#?]+")) {
+
+                throw new tokensNoPermitidos("<html> <b>"+token + "</b> no es valido, linea: " + numeroLinea+"</html>");
             }
-            
+
             Buscar_Palabras_Reservadas(token, numeroLinea, numeroColumna);
             Buscar_Simbolos_Operadores(token, numeroLinea, numeroColumna);
         }
@@ -123,9 +128,9 @@ public class Interfaz extends javax.swing.JFrame {
         }
     }
 
-    public void Buscar_Palabras_Reservadas(String token, int numeroLinea, int numeroColumna) {
+    
+    public void Buscar_Palabras_Reservadas(String token, int numeroLinea, int numeroColumna) throws tokensNoPermitidos {
         boolean encontrado = false; // Bandera para marcar si se encontró el token
-
         // Leer archivo JSON
         JSONParser jsonParser = new JSONParser();
         try (FileReader read = new FileReader("reservadas.json")) {
@@ -151,6 +156,7 @@ public class Interfaz extends javax.swing.JFrame {
                     }
                 }
             }
+
             // Si después el token no fue encontrado, se maneja como identificador o como número
             if (!encontrado) {
                 //Números
