@@ -86,7 +86,7 @@ public class Interfaz extends javax.swing.JFrame {
 
                 throw new tokensNoPermitidos("<html> <b>" + token + "</b> no es valido, linea: " + numeroLinea + "</html>");
             }
-
+            //Envia el token, No.linea y No.columnda a los metodos
             Buscar_Palabras_Reservadas(token, numeroLinea, numeroColumna);
             Buscar_Simbolos_Operadores(token, numeroLinea, numeroColumna);
         }
