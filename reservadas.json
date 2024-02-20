@@ -1,6 +1,11 @@
 [{
         "reservadas": [
             {
+                "nombre": "cadena",
+                "palabra": "String",
+                "tipo": "cadena"
+            },
+            {
                 "nombre": "integer",
                 "palabra": "int",
                 "tipo": "entero"
