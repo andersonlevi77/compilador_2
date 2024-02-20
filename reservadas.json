@@ -34,6 +34,11 @@
                 "nombre": "if",
                 "palabra": "if",
                 "tipo": "reservada"
+            },
+            {
+                "nombre": "main",
+                "palabra": "main",
+                "tipo": "reservada"
             }
         ]
     }]
