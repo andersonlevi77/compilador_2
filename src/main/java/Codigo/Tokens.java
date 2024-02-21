@@ -28,7 +28,8 @@ public class Tokens {
         Matcher matcher = pattern.matcher(texto);
 
         int numeroLinea = 1;
-        int inicioLinea = 0;
+        int numeroColumna = 1; // Inicializa el contador de tokens por línea
+        
         while (matcher.find()) {
             String token = matcher.group();
 
@@ -44,13 +45,13 @@ public class Tokens {
             // Ajuste específico para saltos de línea
             if (token.matches("\\n+")) {
                 numeroLinea += token.length(); // Cuenta cada salto de línea individualmente
-                inicioLinea = matcher.end(); // Ajusta el inicio de la línea después de los saltos de línea
+                numeroColumna = 1; // Restablece el contador si hay un salto de linea
                 continue; // No añade saltos de línea al array de tokens
             }
 
-            // Calcula la columna como la posición de inicio del matcher menos el inicio de la línea actual (arreglar)
-            int columna = matcher.start() - inicioLinea + 1;
-            tokens.add(token + "°" + numeroLinea + "¬" + columna);
+            // Añade separedores entre el numero de linea y columna para despues procesarlos de manera correcta
+            tokens.add(token + "°" + numeroLinea + "¬" + numeroColumna);
+            numeroColumna++;
         }
         //Envia los tokens
         return tokens;
