@@ -1,1 +1,1 @@
-<entero , int><inicio , (><cierre , )><entero , int>
+<entero , int><Id , x><Asignación , =><Valor , 3><signo , ;><reservada , import><Id , xs>
