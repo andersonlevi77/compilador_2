@@ -66,10 +66,12 @@ public class Interfaz extends javax.swing.JFrame {
     private void actualizarTabla() throws tokensNoPermitidos {
         //Obtiene el array de los tokens econtrados
         Tokens reservadasEsc = new Tokens();
+        reservadasEsc.detectarCaracteresIncorrectosRW(txtDatos.getText());
         ArrayList<String> listaTokens = reservadasEsc.separacionTokens(txtDatos.getText());
+
         System.out.println("tk: " + listaTokens); //imprimir listaTokens
 
-        //Itera sobre cada token y lo separa por cada salto de linea que encuentre
+        //Itera sobre cada token y lo separa por cada separador que encuentre
         for (String tokenLinea : listaTokens) {
             String[] partes = tokenLinea.split("\\°|\\¬"); // Divide el token, el número de línea y número de columna
             System.out.println("tokens: " + Arrays.toString(partes)); //imprime los tokens
@@ -147,13 +149,13 @@ public class Interfaz extends javax.swing.JFrame {
                 for (Object reservada : reservadasList) {
                     JSONObject palabra = (JSONObject) reservada;
                     String nombre = (String) palabra.get("nombre");
-                    String palb = (String) palabra.get("palabra");
+                    String palab = (String) palabra.get("palabra");
                     String tipo = (String) palabra.get("tipo");
 
-                    if (token.equals(palb)) {
-                        agregarDtTabla(numeroLinea, numeroColumna, nombre, palb, tipo);
+                    if (token.equals(palab)) {
+                        agregarDtTabla(numeroLinea, numeroColumna, nombre, palab, tipo);
                         encontrado = true; // Marca como encontrado
-                        
+
                         // Comprobar si la palabra reservada actual es consecutiva a otra en la misma línea
                         if (tokenAnterior != null && lineaTokenAnterior == numeroLinea) {
                             throw new tokensNoPermitidos("No se permiten dos palabras reservadas consecutivas en la misma línea: " + numeroLinea);
@@ -173,10 +175,11 @@ public class Interfaz extends javax.swing.JFrame {
                 //Números
                 if (token.matches("-?\\b\\d+(\\.\\d+)?\\b")) {
                     agregarDtTabla(numeroLinea, numeroColumna, "Numero", token, "Valor");
-                } else if (token.matches("[a-zA-Z][a-zA-Z0-9_$]*")) {
+                } else if (token.matches("[a-zA-Z][a-zA-Z0-9_]*")) {
                     //Identificadores
                     agregarDtTabla(numeroLinea, numeroColumna, "Identificador", token, "Id");
                 } else if (token.matches("\"[^\\\"]*\"")) {
+                    //Cadena de Texto
                     agregarDtTabla(numeroLinea, numeroColumna, "Cadena de texto", token, "String");
                 }
             }
@@ -185,7 +188,7 @@ public class Interfaz extends javax.swing.JFrame {
             if (numeroLinea != lineaTokenAnterior) {
                 tokenAnterior = null;
             }
-            
+
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {
@@ -503,8 +506,8 @@ public class Interfaz extends javax.swing.JFrame {
         //Reset de variables
         tokenAnterior = null;
         lineaTokenAnterior = -1;
-        
         tabla.setRowCount(0);
+
         try {
             actualizarTabla();
             mostrarTokens();
