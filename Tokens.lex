@@ -1,1 +1,1 @@
-<entero , int><Id , x><Asignación , =><Valor , 3><signo , ;><reservada , import><Id , xs>
+<entero , int><Id , x><Asignación , =><Valor , 0><signo , ;>
