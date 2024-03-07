@@ -41,14 +41,14 @@ public class Tokens {
                         JSONObject palabra = (JSONObject) reservada;
                         String palab = (String) palabra.get("palabra");
                         // Expresión para detectar los caracteres
-                        Pattern pattern = Pattern.compile("\\b" + palab + "\\b\\s*[\\$\\'\\#\\\"\\!\\/]+\\s*\\w+\\;");
+                        Pattern pattern = Pattern.compile("\\b" + palab + "\\b\\s*[\\’\\$\\'\\#\\!\\/<\\\"]+\\s*\\w+\\;");
                         Matcher matcher = pattern.matcher(linea);
                         // Si se encuentra la expresión
                         if (matcher.find()) {
                             // Reservada incorrecta
                             String token = matcher.group();
                             // Separación de reservadas segun sus caracteres
-                            String[] partesReservada = token.split("[\\$\\'\\#\\\"\\!\\/]");
+                            String[] partesReservada = token.split("[\\’\\$\\'\\#\\\"\\!\\/\\\"]");
                             // Reservada correcta
                             String resultado = String.join("", partesReservada);
                             //lanza el aviso
