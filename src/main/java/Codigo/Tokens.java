@@ -41,7 +41,7 @@ public class Tokens {
                         JSONObject palabra = (JSONObject) reservada;
                         String palab = (String) palabra.get("palabra");
                         // Expresión para detectar los caracteres
-                        Pattern pattern = Pattern.compile("\\b" + palab + "\\b\\s*[\\’\\$\\'\\#\\!\\/<\\\"]+\\s*\\w+\\;");
+                        Pattern pattern = Pattern.compile("\\b" + palab + "\\b\\s*[\\’\\$\\'\\#\\!\\/\\\"]+\\s*\\w+\\;");
                         Matcher matcher = pattern.matcher(linea);
                         // Si se encuentra la expresión
                         if (matcher.find()) {
