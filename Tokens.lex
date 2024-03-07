@@ -1,1 +1,1 @@
-<decimal , float><Id , a><signo , ;>
+<decimal , double><Id , x><signo , ;>
