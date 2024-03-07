@@ -134,77 +134,80 @@ public class Interfaz extends javax.swing.JFrame {
 
     public void Buscar_Palabras_Reservadas(String token, int numeroLinea, int numeroColumna) throws tokensNoPermitidos {
         boolean encontrado = false; // Bandera para marcar si se encontró el token
-        String minuscula = token.toLowerCase();
+        //convertir la reservada a minuscula
+        String reservada_minuscula = token.toLowerCase();
+        
         // Leer archivo JSON
-        // Leer archivo JSON
-    JSONParser jsonParser = new JSONParser();
-    try (FileReader read = new FileReader("reservadas.json")) {
-        // Leer archivo JSON
-        Object obj = jsonParser.parse(read);
-        JSONArray listaObjetos = (JSONArray) obj;
+        JSONParser jsonParser = new JSONParser();
+        try (FileReader read = new FileReader("reservadas.json")) {
+            // Leer archivo JSON
+            Object obj = jsonParser.parse(read);
+            JSONArray listaObjetos = (JSONArray) obj;
 
-        // Iterar sobre cada objeto JSON en la lista
-        for (Object item : listaObjetos) {
-            JSONObject jsonObject = (JSONObject) item;
-            JSONArray reservadasList = (JSONArray) jsonObject.get("reservadas");
+            // Iterar sobre cada objeto JSON en la lista
+            for (Object item : listaObjetos) {
+                JSONObject jsonObject = (JSONObject) item;
+                JSONArray reservadasList = (JSONArray) jsonObject.get("reservadas");
 
-            for (Object reservada : reservadasList) {
-                JSONObject palabra = (JSONObject) reservada;
-                String nombre = (String) palabra.get("nombre");
-                String palb = (String) palabra.get("palabra");
-                String tipo = (String) palabra.get("tipo");
+                for (Object reservada : reservadasList) {
+                    JSONObject palabra = (JSONObject) reservada;
+                    String nombre = (String) palabra.get("nombre");
+                    String palab = (String) palabra.get("palabra");
+                    String tipo = (String) palabra.get("tipo");
 
-                // Convertir la palabra reservada a minúsculas para la comparación
-                String palb_minuscula = palb.toLowerCase();
+                    // Convertir la palabra reservada a minúsculas para la comparación
+                    String palb_minuscula = palab.toLowerCase();
 
-                if (minuscula.equals(palb_minuscula)) {
-                    // Mensaje de JOptionPane sobre la corrección
-                    if (!token.equals(palb)) {
-                        JOptionPane.showMessageDialog(null, "Se ha corregido: '" + token + "' a '" + palb + "'", "Corrección", JOptionPane.INFORMATION_MESSAGE);
+                    if (reservada_minuscula.equals(palb_minuscula)) {
+                        // Mensaje de JOptionPane sobre la corrección
+                        if (!token.equals(palab)) {
+                            JOptionPane.showMessageDialog(null, "Se ha corregido: '" + token 
+                                    + "' a '" + palab + "'", "Corrección", JOptionPane.INFORMATION_MESSAGE);
+                        }
+
+                        agregarDtTabla(numeroLinea, numeroColumna, nombre, palab, tipo);
+                        encontrado = true; // Marca como encontrado
+
+                        // Comprobar si la palabra reservada actual es consecutiva a otra en la misma línea
+                        if (tokenAnterior != null && lineaTokenAnterior == numeroLinea) {
+                            throw new tokensNoPermitidos("No se permiten dos palabras reservadas consecutivas en la misma línea: " + numeroLinea);
+                        }
+                        tokenAnterior = token; // Actualiza el token anterior
+                        lineaTokenAnterior = numeroLinea; // Actualiza el número de línea del token anterior
+                        break;
                     }
-
-                    agregarDtTabla(numeroLinea, numeroColumna, nombre, palb, tipo);
-                    encontrado = true; // Marca como encontrado
-
-                    // Comprobar si la palabra reservada actual es consecutiva a otra en la misma línea
-                    if (tokenAnterior != null && lineaTokenAnterior == numeroLinea) {
-                        throw new tokensNoPermitidos("No se permiten dos palabras reservadas consecutivas en la misma línea: " + numeroLinea);
-                    }
-                    tokenAnterior = token; // Actualiza el token anterior
-                    lineaTokenAnterior = numeroLinea; // Actualiza el número de línea del token anterior
-                    break;
+                }
+                if (encontrado) {
+                    break; // Sale del ciclo si se encuentra la palabra reservada
                 }
             }
-            if (encontrado) {
-                break; // Sale del ciclo si se encuentra la palabra reservada
+
+            // Si después el token no fue encontrado, se maneja como identificador, número o cadena de texto
+            if (!encontrado) {
+                // Números
+                if (token.matches("-?\\b\\d+(\\.\\d+)?\\b")) {
+                    agregarDtTabla(numeroLinea, numeroColumna, "Numero", token, "Valor");
+                } else if (token.matches("[a-zA-Z][a-zA-Z0-9_$]*")) {
+                    // Identificadores
+                    agregarDtTabla(numeroLinea, numeroColumna, "Identificador", token, "Id");
+                } else if (token.matches("\"[^\\\"]*\"")) {
+                    //Cadena de texto
+                    agregarDtTabla(numeroLinea, numeroColumna, "Cadena de texto", token, "String");
+                }
             }
-        }
 
-        // Si después el token no fue encontrado, se maneja como identificador, número o cadena de texto
-        if (!encontrado) {
-            // Números
-            if (token.matches("-?\\b\\d+(\\.\\d+)?\\b")) {
-                agregarDtTabla(numeroLinea, numeroColumna, "Numero", token, "Valor");
-            } else if (token.matches("[a-zA-Z][a-zA-Z0-9_$]*")) {
-                // Identificadores
-                agregarDtTabla(numeroLinea, numeroColumna, "Identificador", token, "Id");
-            } else if (token.matches("\"[^\\\"]*\"")) {
-                agregarDtTabla(numeroLinea, numeroColumna, "Cadena de texto", token, "String");
+            // Resetea tokenAnterior si hay un salto de línea
+            if (numeroLinea != lineaTokenAnterior) {
+                tokenAnterior = null;
             }
-        }
 
-        // Resetea tokenAnterior si hay un salto de línea
-        if (numeroLinea != lineaTokenAnterior) {
-            tokenAnterior = null;
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } catch (org.json.simple.parser.ParseException ex) {
+            Logger.getLogger(Tokens.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-    } catch (FileNotFoundException ex) {
-        ex.printStackTrace();
-    } catch (IOException ex) {
-        ex.printStackTrace();
-    } catch (org.json.simple.parser.ParseException ex) {
-        Logger.getLogger(Tokens.class.getName()).log(Level.SEVERE, null, ex);
-    }
     }
 
     public void mostrarTokens() {
