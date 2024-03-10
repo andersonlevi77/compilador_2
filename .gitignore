@@ -4,32 +4,11 @@
 # Log file
 *.log
 
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
-
-
-*.properties
-/dist/
-private.xml
 target/
 
 # Carpeta de compilación de NetBeans
-nbbuild/
-dist/
-nbdist/
-nbactions.xml
+private.xml
+
 
 # Archivos privados de NetBeans
 nb-configuration.xml
@@ -48,10 +27,3 @@ nbproject/GeneratedCode/
 backup*/
 *.bak
 *~
-
-# Carpetas de configuración de IDE general
-.idea/
-*.iml
-*.iws
-*.ipr
-
