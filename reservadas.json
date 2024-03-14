@@ -3,27 +3,27 @@
             {
                 "nombre": "cadena",
                 "palabra": "String",
-                "tipo": "cadena"
+                "tipo": "reservada"
             },
             {
                 "nombre": "integer",
                 "palabra": "int",
-                "tipo": "entero"
+                "tipo": "reservada"
             },
             {
                 "nombre": "double",
                 "palabra": "double",
-                "tipo": "decimal"
+                "tipo": "reservada"
             },
             {
                 "nombre": "flotante",
                 "palabra": "float",
-                "tipo": "decimal"
+                "tipo": "reservada"
             },
             {
                 "nombre": "double",
                 "palabra": "double",
-                "tipo": "decimal"
+                "tipo": "reservada"
             },
             {
                 "nombre": "importar",
@@ -43,6 +43,11 @@
             {
                 "nombre": "main",
                 "palabra": "main",
+                "tipo": "reservada"
+            },
+            {
+                "nombre": "entonces",
+                "palabra": "then",
                 "tipo": "reservada"
             }
         ]
