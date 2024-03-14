@@ -54,6 +54,11 @@
                 "nombre": "Decrece",
                 "simbolo": "--",
                 "tipo": "Decrece"
+            },
+            {
+                "nombre": "Igual",
+                "simbolo": "==",
+                "tipo": "simbolo"
             }
         ]
     }]
