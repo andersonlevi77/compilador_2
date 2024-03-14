@@ -18,6 +18,7 @@ import org.json.simple.parser.JSONParser;
  * @author juani
  */
 public class Tokens {
+
     //método para descartar las palabras reservadas con caracteres incorrectos
     public void detectarCaracteresIncorrectosRW(String texto) throws tokensNoPermitidos {
         // Leer archivo JSON
@@ -72,7 +73,9 @@ public class Tokens {
         // Detecta los tokens establecidos a base de una expresión regular
         Pattern pattern = Pattern.compile(
                 //comentarios y saltos de línea
-                "//[^\\n]*|/\\*.*?\\*/|\\n+"
+                "//[^\\n]*|/\\*.*?\\*/"
+                //otros comentarios (cambios)
+                + "|<-[^\\n]*?->|<\\--.*?\\-->|\\n+"
                 //Cadenas de Texto
                 + "|\"[^\\\"]*\""
                 //combinación de caracteres
@@ -80,7 +83,7 @@ public class Tokens {
                 //combinación de números
                 + "|-?\\d+(\\.\\d+)*\\.?"
                 //símbolos
-                + "|\\;|\\=|\\+\\+|\\-\\-|\\+|\\-|\\)|\\(|\\>|\\<|\\,", Pattern.DOTALL);
+                + "|\\=\\=|\\;|\\+\\+|\\-\\-|\\+|\\-|\\)|\\(|\\>|\\<|\\,|\\=", Pattern.DOTALL);
         Matcher matcher = pattern.matcher(texto);
 
         int numeroLinea = 1;
@@ -90,9 +93,11 @@ public class Tokens {
             String token = matcher.group();
 
             // Ignora los comentarios para añadirlos al array
-            if (token.startsWith("//") || token.startsWith("/*")) {
+            if (token.startsWith("//") || token.startsWith("/*") || (token.startsWith("<-") && token.endsWith("->"))
+                    || token.matches("<\\--.*?\\-->")) { //(cambios)
                 // Ajusta el número de línea para comentarios de bloque que contienen saltos de línea
-                if (token.startsWith("/*")) {
+                if (token.startsWith("/*") || (token.startsWith("<-") && token.endsWith("->"))
+                        || token.matches("<\\--.*?\\-->")) { //(cambios)
                     numeroLinea += token.split("\n", -1).length - 1;
                 }
                 continue; // No agregar comentarios al array
