@@ -3,57 +3,67 @@
             {
                 "nombre": "Punto y coma",
                 "simbolo": ";",
-                "tipo": "signo"
+                "tipo": "simbolo"
             },
             {
                 "nombre": "Coma",
                 "simbolo": ",",
-                "tipo": "separación"
+                "tipo": "simbolo"
             },
             {
                 "nombre": "Paréntesis abierto",
                 "simbolo": "(",
-                "tipo": "inicio"
+                "tipo": "simbolo"
             },
             {
                 "nombre": "Paréntesis cerrado",
                 "simbolo": ")",
-                "tipo": "cierre"
+                "tipo": "simbolo"
+            },
+            {
+                "nombre": "Llave abierta",
+                "simbolo": "{",
+                "tipo": "simbolo"
+            },
+            {
+                "nombre": "Llave cerrada",
+                "simbolo": "}",
+                "tipo": "simbolo"
             },
             {
                 "nombre": "Asignacíon",
                 "simbolo": "=",
-                "tipo": "Asignación"
+                "tipo": "simbolo"
             },
             {
                 "nombre": "Suma",
                 "simbolo": "+",
-                "tipo": "Suma"
+                "tipo": "simbolo"
             },
             {
                 "nombre": "Resta",
                 "simbolo": "-",
-                "tipo": "Resta"
+                "tipo": "simbolo"
             },
             {
                 "nombre": "Mayor",
                 "simbolo": ">",
-                "tipo": "Mayor"
+                "tipo": "simbolo"
             },
             {
                 "nombre": "Menor",
                 "simbolo": "<",
-                "tipo": "Menor"
+                "tipo": "simbolo"
             },
             {
                 "nombre": "Incremento",
                 "simbolo": "++",
-                "tipo": "Incremento"
+                "tipo": "simbolo"
             },
             {
                 "nombre": "Decrece",
                 "simbolo": "--",
-                "tipo": "Decrece"
+                "tipo": "simbolo"
             },
             {
                 "nombre": "Igual",
