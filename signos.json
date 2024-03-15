@@ -31,6 +31,16 @@
                 "tipo": "simbolo"
             },
             {
+                "nombre": "Corchete abierto",
+                "simbolo": "[",
+                "tipo": "simbolo"
+            },
+            {
+                "nombre": "Corchete cerrado",
+                "simbolo": "]",
+                "tipo": "simbolo"
+            },
+            {
                 "nombre": "Asignacíon",
                 "simbolo": "=",
                 "tipo": "simbolo"
