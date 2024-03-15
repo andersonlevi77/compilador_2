@@ -67,15 +67,13 @@ public class Tokens {
         }
     }
 
-    public ArrayList<String> separacionTokens(String texto) {
+    public ArrayList<String> separacionTokens(String texto) throws tokensNoPermitidos {
         //Crea una lista para almacenar los tokens
         ArrayList<String> tokens = new ArrayList<>();
         // Detecta los tokens establecidos a base de una expresión regular
         Pattern pattern = Pattern.compile(
                 //comentarios y saltos de línea
-                "//[^\\n]*|/\\*.*?\\*/"
-                //otros comentarios (cambios)
-                + "|<-[^\\n]*?->|<\\--.*?\\-->|\\n+"
+                "//[^\\n]*|/\\*.*?\\*/|\\n+"
                 //Cadenas de Texto
                 + "|\"[^\\\"]*\""
                 //combinación de caracteres
@@ -93,11 +91,9 @@ public class Tokens {
             String token = matcher.group();
 
             // Ignora los comentarios para añadirlos al array
-            if (token.startsWith("//") || token.startsWith("/*") || (token.startsWith("<-") && token.endsWith("->"))
-                    || token.matches("<\\--.*?\\-->")) { //(cambios)
+            if (token.startsWith("//") || token.startsWith("/*")) {
                 // Ajusta el número de línea para comentarios de bloque que contienen saltos de línea
-                if (token.startsWith("/*") || (token.startsWith("<-") && token.endsWith("->"))
-                        || token.matches("<\\--.*?\\-->")) { //(cambios)
+                if (token.startsWith("/*")) {
                     numeroLinea += token.split("\n", -1).length - 1;
                 }
                 continue; // No agregar comentarios al array
