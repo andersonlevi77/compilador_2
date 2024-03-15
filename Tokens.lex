@@ -1,1 +1,1 @@
-<reservada , double><Id , x><Asignación , =><Valor , 3.2><signo , ;><reservada , int><Id , x><signo , ;>
+<reservada , int><Id , x><simbolo , =><Valor , 21120><simbolo , ;>
