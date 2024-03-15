@@ -1,1 +1,1 @@
-<reservada , int><Id , x><simbolo , =><Valor , 21120><simbolo , ;>
+<simbolo , (><simbolo , )><simbolo , [><simbolo , ]><simbolo , {><simbolo , }>
