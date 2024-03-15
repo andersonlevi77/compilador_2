@@ -3,6 +3,7 @@ package Interfaz;
 import Codigo.Tokens;
 import Codigo.FiltroArchivos;
 import Excepciones.tokensNoPermitidos;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -84,7 +85,7 @@ public class Interfaz extends javax.swing.JFrame {
                     //Números no validos
                     "(?:\\d+\\.\\d+)(?:\\.\\d+)+|\\d+\\.$"
                     //Identificadores no validos
-                    + "|(^\\d\\w+)|^[#?]\\w+|\\w+[#?]+")) {
+                    + "|^\\d\\w*\\D+|^[#?]\\w+|\\w+[#?]+")) {
 
                 throw new tokensNoPermitidos("<html> <b>" + token + "</b> no es valido, linea: " + numeroLinea + "</html>");
             }
@@ -136,7 +137,7 @@ public class Interfaz extends javax.swing.JFrame {
         boolean encontrado = false; // Bandera para marcar si se encontró el token
         //convertir la reservada a minuscula
         String reservada_minuscula = token.toLowerCase();
-        
+
         // Leer archivo JSON
         JSONParser jsonParser = new JSONParser();
         try (FileReader read = new FileReader("reservadas.json")) {
@@ -161,7 +162,7 @@ public class Interfaz extends javax.swing.JFrame {
                     if (reservada_minuscula.equals(palb_minuscula)) {
                         // Mensaje de JOptionPane sobre la corrección
                         if (!token.equals(palab)) {
-                            JOptionPane.showMessageDialog(null, "Se ha corregido: '" + token 
+                            JOptionPane.showMessageDialog(null, "Se ha corregido: '" + token
                                     + "' a '" + palab + "'", "Corrección", JOptionPane.INFORMATION_MESSAGE);
                         }
 
@@ -210,7 +211,7 @@ public class Interfaz extends javax.swing.JFrame {
         }
     }
 
-    public void mostrarTokens() {
+    public String generarArchivoTokens() {
         String tokens = "";
         //Itera en cada fila de la tabla
         for (int i = 0; i < tabla.getRowCount(); i++) {
@@ -226,13 +227,14 @@ public class Interfaz extends javax.swing.JFrame {
                 tokens += "<" + tipo + " , " + simbolo + ">";
             }
         }
-        //Coloca los token con su respectivo formato
-        txtTokens.setText(tokens);
+        //Retorna los token con su respectivo formato
+        return tokens;
     }
-
-    private void guardarlex() {
+    
+    //guarda el archivo de tokens generado
+    private void guardarLex() {
         try {
-            String contenido = txtTokens.getText();
+            String contenido = generarArchivoTokens();
 
             // Cambia la ruta y el nombre del archivo
             File fileToSave = new File("Tokens.lex");
@@ -247,6 +249,33 @@ public class Interfaz extends javax.swing.JFrame {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private String leerLex() {
+        StringBuilder contenido = new StringBuilder();
+        File fileToRead = new File("Tokens.lex");
+
+        try (FileReader fileReader = new FileReader(fileToRead); BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+
+            String linea;
+            while ((linea = bufferedReader.readLine()) != null) {
+                contenido.append(linea).append("\n");
+            }
+
+        } catch (FileNotFoundException e) {
+            JOptionPane.showMessageDialog(null, "El archivo no se encontró.");
+            e.printStackTrace();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Ocurrió un error al leer el archivo.");
+            e.printStackTrace();
+        }
+
+        return contenido.toString();
+    }
+
+    //metodo que extrae los token del archivo generado de tokens
+    public void extraerTokens() {
+        String contenido = leerLex();
     }
 
     /**
@@ -522,8 +551,8 @@ public class Interfaz extends javax.swing.JFrame {
 
         try {
             actualizarTabla();
-            mostrarTokens();
-            guardarlex();
+            generarArchivoTokens();
+            guardarLex();
         } catch (tokensNoPermitidos ex) {
             Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
             txtTokens.setText(null);
