@@ -81,7 +81,7 @@ public class Tokens {
                 //combinación de números
                 + "|-?\\d+(\\.\\d+)*\\.?"
                 //símbolos
-                + "|\\=\\=|\\;|\\+\\+|\\-\\-|\\+|\\-|\\)|\\(|\\>|\\<|\\,|\\=", Pattern.DOTALL);
+                + "|\\=\\=|\\;|\\+\\+|\\-\\-|\\+|\\-|\\)|\\(|\\>|\\<|\\,|\\=|\\}|\\{|\\]|\\[", Pattern.DOTALL);
         Matcher matcher = pattern.matcher(texto);
 
         int numeroLinea = 1;
