@@ -345,6 +345,7 @@
           <SubComponents>
             <Component class="javax.swing.JTextArea" name="txtSintactico">
               <Properties>
+                <Property name="editable" type="boolean" value="false"/>
                 <Property name="columns" type="int" value="20"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Roboto" size="14" style="1"/>
