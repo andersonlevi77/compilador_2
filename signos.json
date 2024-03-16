@@ -3,7 +3,7 @@
             {
                 "nombre": "Punto y coma",
                 "simbolo": ";",
-                "tipo": "simbolo"
+                "tipo": "delimitador"
             },
             {
                 "nombre": "Coma",
