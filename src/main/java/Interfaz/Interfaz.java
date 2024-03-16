@@ -31,11 +31,11 @@ import org.json.simple.parser.JSONParser;
  * @author Anderson
  */
 public class Interfaz extends javax.swing.JFrame {
-    
+
     DefaultTableModel tabla;
     private String tokenAnterior = null;
     private int lineaTokenAnterior = -1;
-    
+
     public Interfaz() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -46,7 +46,7 @@ public class Interfaz extends javax.swing.JFrame {
         tblDatos.setModel(tabla);
         tblDatos.setEnabled(false);
     }
-    
+
     private void EstiloJfilechooser() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -54,11 +54,11 @@ public class Interfaz extends javax.swing.JFrame {
             Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private void agregarDtTabla(int pos, int col, String nombre, String simbolo, String tipo) {
         tabla.addRow(new Object[]{pos, col, nombre, simbolo, tipo});
     }
-    
+
     private void limpiarTabla_Datos() {
         DefaultTableModel modeloTabla = (DefaultTableModel) tblDatos.getModel();
         modeloTabla.setRowCount(0);
@@ -66,13 +66,13 @@ public class Interfaz extends javax.swing.JFrame {
         txtDatos.setText(null);
         txtSintactico.setText(null);
     }
-    
+
     private void actualizarTabla() throws tokensNoPermitidos {
         //Obtiene el array de los tokens econtrados
         Tokens reservadasEsc = new Tokens();
         reservadasEsc.detectarCaracteresIncorrectosRW(txtDatos.getText());
         ArrayList<String> listaTokens = reservadasEsc.separacionTokens(txtDatos.getText());
-        
+
         System.out.println("tk: " + listaTokens); //imprimir listaTokens
 
         //Itera sobre cada token y lo separa por cada separador que encuentre
@@ -89,7 +89,7 @@ public class Interfaz extends javax.swing.JFrame {
                     "(?:\\d+\\.\\d+)(?:\\.\\d+)+|\\d+\\.$"
                     //Identificadores no validos
                     + "|^\\d\\w*\\D+|^[#?]\\w+|\\w+[#?]+")) {
-                
+
                 throw new tokensNoPermitidos("<html> <b>" + token + "</b> no es valido, linea: " + numeroLinea + "</html>");
             }
             //Envia el token, No.linea y No.columnda a los metodos
@@ -97,7 +97,7 @@ public class Interfaz extends javax.swing.JFrame {
             Buscar_Simbolos_Operadores(token, numeroLinea, numeroColumna);
         }
     }
-    
+
     public void Buscar_Simbolos_Operadores(String token, int numeroLinea, int numeroColumna) {
         //Leer archivo JSON
         JSONParser jsonParser = new JSONParser();
@@ -126,7 +126,7 @@ public class Interfaz extends javax.swing.JFrame {
                     }
                 }
             }
-            
+
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {
@@ -135,7 +135,7 @@ public class Interfaz extends javax.swing.JFrame {
             Logger.getLogger(Tokens.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void Buscar_Palabras_Reservadas(String token, int numeroLinea, int numeroColumna) throws tokensNoPermitidos {
         boolean encontrado = false; // Bandera para marcar si se encontró el token
         //convertir la reservada a minuscula
@@ -152,7 +152,7 @@ public class Interfaz extends javax.swing.JFrame {
             for (Object item : listaObjetos) {
                 JSONObject jsonObject = (JSONObject) item;
                 JSONArray reservadasList = (JSONArray) jsonObject.get("reservadas");
-                
+
                 for (Object reservada : reservadasList) {
                     JSONObject palabra = (JSONObject) reservada;
                     String nombre = (String) palabra.get("nombre");
@@ -161,14 +161,14 @@ public class Interfaz extends javax.swing.JFrame {
 
                     // Convertir la palabra reservada a minúsculas para la comparación
                     String palb_minuscula = palab.toLowerCase();
-                    
+
                     if (reservada_minuscula.equals(palb_minuscula)) {
                         // Mensaje de JOptionPane sobre la corrección
                         if (!token.equals(palab)) {
                             JOptionPane.showMessageDialog(null, "Se ha corregido: '" + token
                                     + "' a '" + palab + "'", "Corrección", JOptionPane.INFORMATION_MESSAGE);
                         }
-                        
+
                         agregarDtTabla(numeroLinea, numeroColumna, nombre, palab, tipo);
                         encontrado = true; // Marca como encontrado
 
@@ -204,7 +204,7 @@ public class Interfaz extends javax.swing.JFrame {
             if (numeroLinea != lineaTokenAnterior) {
                 tokenAnterior = null;
             }
-            
+
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {
@@ -213,7 +213,7 @@ public class Interfaz extends javax.swing.JFrame {
             Logger.getLogger(Tokens.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public String generarArchivoTokens() {
         String tokens = "";
         //Itera en cada fila de la tabla
@@ -241,7 +241,7 @@ public class Interfaz extends javax.swing.JFrame {
 
             // Cambia la ruta y el nombre del archivo
             File fileToSave = new File("Tokens.lex");
-            
+
             try (FileWriter fileWriter = new FileWriter(fileToSave)) {
                 fileWriter.write(contenido);
                 //JOptionPane.showMessageDialog(null, "El archivo se ha guardado correctamente!");
@@ -258,14 +258,14 @@ public class Interfaz extends javax.swing.JFrame {
     private String leerLex() {
         StringBuilder contenido = new StringBuilder();
         File fileToRead = new File("Tokens.lex");
-        
+
         try (FileReader fileReader = new FileReader(fileToRead); BufferedReader bufferedReader = new BufferedReader(fileReader)) {
-            
+
             String linea;
             while ((linea = bufferedReader.readLine()) != null) {
                 contenido.append(linea).append("\n");
             }
-            
+
         } catch (FileNotFoundException e) {
             JOptionPane.showMessageDialog(null, "El archivo no se encontró.");
             e.printStackTrace();
@@ -273,7 +273,7 @@ public class Interfaz extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Ocurrió un error al leer el archivo.");
             e.printStackTrace();
         }
-        
+
         return contenido.toString();
     }
 
@@ -284,7 +284,7 @@ public class Interfaz extends javax.swing.JFrame {
         Pattern pattern = Pattern.compile("<([^>]+) , (?:'([^']+)'|([^>]+))>");
         Matcher matcher = pattern.matcher(contenido);
         StringBuilder resultado = new StringBuilder();
-        
+
         while (matcher.find()) {
             String categoria = matcher.group(1).trim(); // Extrae la categoría
             String valor = matcher.group(2) != null ? matcher.group(2).trim() : matcher.group(3).trim(); //Extrae el valor
@@ -296,7 +296,7 @@ public class Interfaz extends javax.swing.JFrame {
         }
         return resultado.toString();
     }
-    
+
     public boolean validarExpresionSimbolos() {
         PilaSimbolos pila = new PilaSimbolos();
         String cadena = extraerTokensSimbolos();
@@ -333,7 +333,7 @@ public class Interfaz extends javax.swing.JFrame {
         Pattern pattern = Pattern.compile("<([^>]+) , (?:'([^']+)'|([^>]+))>");
         Matcher matcher = pattern.matcher(contenido);
         ArrayList<String[]> resultado = new ArrayList<>();
-        
+
         while (matcher.find()) {
             String categoria = matcher.group(1).trim(); // Extrae la categoría
             String valor = matcher.group(2) != null ? matcher.group(2).trim() : matcher.group(3).trim(); //Extrae el valor
@@ -347,33 +347,27 @@ public class Interfaz extends javax.swing.JFrame {
     //validar las demas expresiones
     public boolean validarExpresion() {
         ArrayList<String[]> tokens = extraerTokens();
-        Pila pila = new Pila();        
         boolean esperandoIdentificador = false;
         boolean esperandoValorIdentificador = false;
         boolean esperandoDelimitadorFinal = false;
-        
+
         for (int i = 0; i < tokens.size(); i++) {
             String[] tokenActual = tokens.get(i);
             String categoria = tokenActual[0];
             String valor = tokenActual[1];
 
             if ("reservada".equals(categoria)) {
-                pila.insertar(valor);
                 esperandoIdentificador = true;
             } else if ("id".equals(categoria) && esperandoIdentificador) {
-                pila.insertar(valor);
                 esperandoIdentificador = false;
                 esperandoValorIdentificador = true; // se puede asignar un valor inmediatamente después
             } else if ("=".equals(valor) && esperandoValorIdentificador) {
-                pila.insertar(valor);
                 esperandoDelimitadorFinal = true; // después de un '=', debe venir un valor/identificador y luego un ';'
             } else if (("valor".equals(categoria) || "id".equals(categoria)) && esperandoValorIdentificador) {
-                pila.insertar(valor);
                 esperandoValorIdentificador = false;
                 // No se modifica esperandoDelimitadorFinal ya que ya está en true después de ver '='
             } else if (";".equals(valor) && esperandoDelimitadorFinal) {
                 // Una secuencia válida termina aquí
-                pila.insertar(valor);
                 esperandoDelimitadorFinal = false; // Se reinicia el estado para permitir nuevas declaraciones después
             } else {
                 // Si se encuentra cualquier otro caso es una expresión inválida, espera lo que obtenga al validar los simbolos de apertura y cierre
@@ -525,6 +519,7 @@ public class Interfaz extends javax.swing.JFrame {
             }
         });
 
+        txtSintactico.setEditable(false);
         txtSintactico.setColumns(20);
         txtSintactico.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
         txtSintactico.setRows(5);
@@ -613,10 +608,10 @@ public class Interfaz extends javax.swing.JFrame {
         //Filtro para buscar archivos
         chooser.setFileFilter(new FiltroArchivos(".java", "Archivo java"));
         chooser.setFileFilter(new FiltroArchivos(".chalk", "CHALK"));
-        
+
         chooser.showOpenDialog(null);
         File archivo = new File(chooser.getSelectedFile().getAbsolutePath());
-        
+
         try {
             String ST = new String(Files.readAllBytes(archivo.toPath()));
             txtDatos.setText(ST);
@@ -634,12 +629,12 @@ public class Interfaz extends javax.swing.JFrame {
         fileChooser.setDialogTitle("Guardar");
         //Filtro extensión propia
         fileChooser.setFileFilter(new FiltroArchivos(".chalk", "CHALK"));
-        
+
         int selection = fileChooser.showSaveDialog(null);
-        
+
         if (selection == JFileChooser.APPROVE_OPTION) {
             java.io.File fileToSave = fileChooser.getSelectedFile();
-            
+
             try (FileWriter fileWriter = new FileWriter(fileToSave + ".chalk")) {
                 fileWriter.write(txtDatos.getText());
                 JOptionPane.showMessageDialog(null, "El archivo se ha guardado correctamente!");
@@ -655,12 +650,12 @@ public class Interfaz extends javax.swing.JFrame {
         tokenAnterior = null;
         lineaTokenAnterior = -1;
         tabla.setRowCount(0);
-        
+
         try {
             actualizarTabla();
             guardarLex();
             if (validarExpresionSimbolos() && validarExpresion()) {
-                txtSintactico.setText("Esta bueno");
+                txtSintactico.setText("Compilado");
                 txtSintactico.setForeground(Color.green);
             } else {
                 txtSintactico.setText("Error sintactico");
