@@ -1,1 +1,1 @@
-<simbolo , (><simbolo , )><simbolo , [><simbolo , ]><simbolo , {><simbolo , }>
+<reservada , if><simbolo , (><simbolo , )><simbolo , {>
