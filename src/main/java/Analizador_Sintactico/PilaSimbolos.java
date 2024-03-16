@@ -4,11 +4,17 @@ package Analizador_Sintactico;
  *
  * @author juani
  */
-public class Pila {
+public class PilaSimbolos {
 
-    private Nodo ultimoNodoIngresado; //ultimo nodo ingresado
+    private class Nodo {
+
+        char valor; //elemento que tiene el nodo
+        Nodo siguiente;
+    }
     
-    public Pila() {
+    private Nodo ultimoNodoIngresado; //ultimo nodo ingresado
+
+    public PilaSimbolos() {
         this.ultimoNodoIngresado = null;
     }
 
@@ -24,20 +30,21 @@ public class Pila {
             ultimoNodoIngresado = nuevoNodo;
         }
     }
+
     //metodo para extraer datos
     public char extraer() {
         if (ultimoNodoIngresado != null) {
             char informacion = ultimoNodoIngresado.valor; //contiene el simbolo
             ultimoNodoIngresado = ultimoNodoIngresado.siguiente; //apuntar al siguiente nodo
             return informacion;
-        }else{
+        } else {
             return Character.MAX_VALUE;
         }
     }
-    
+
     //metodo para saber si la pila esta vacia
-    public boolean pilaVacia(){
+    public boolean pilaVacia() {
         return ultimoNodoIngresado == null;
     }
-    
+
 }
