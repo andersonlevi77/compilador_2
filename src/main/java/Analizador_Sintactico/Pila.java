@@ -6,14 +6,20 @@ package Analizador_Sintactico;
  */
 public class Pila {
 
-    private Nodo ultimoNodoIngresado; //ultimo nodo ingresado
+    private class Nodo {
+
+        String valor; //elemento que tiene el nodo
+        Nodo siguiente;
+    }
     
+    private Nodo ultimoNodoIngresado; //ultimo nodo ingresado
+
     public Pila() {
         this.ultimoNodoIngresado = null;
     }
 
     //metodo para insertar dentro de la pila
-    public void insertar(char valor) {
+    public void insertar(String valor) {
         Nodo nuevoNodo = new Nodo();
         nuevoNodo.valor = valor;
         if (ultimoNodoIngresado == null) {
@@ -24,20 +30,20 @@ public class Pila {
             ultimoNodoIngresado = nuevoNodo;
         }
     }
+
     //metodo para extraer datos
-    public char extraer() {
+    public String extraer() {
         if (ultimoNodoIngresado != null) {
-            char informacion = ultimoNodoIngresado.valor; //contiene el simbolo
+            String informacion = ultimoNodoIngresado.valor; //contiene el simbolo
             ultimoNodoIngresado = ultimoNodoIngresado.siguiente; //apuntar al siguiente nodo
             return informacion;
-        }else{
-            return Character.MAX_VALUE;
+        } else {
+            return null;
         }
     }
-    
+
     //metodo para saber si la pila esta vacia
-    public boolean pilaVacia(){
+    public boolean pilaVacia() {
         return ultimoNodoIngresado == null;
     }
-    
 }
