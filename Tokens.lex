@@ -1,1 +1,1 @@
-<reservada , if><simbolo , (><simbolo , )><simbolo , {>
+<reservada , int><id , x><simbolo , ,><id , y><delimitador , ;>
