@@ -41,6 +41,11 @@
                 "tipo": "reservada"
             },
             {
+                "nombre": "while",
+                "palabra": "while",
+                "tipo": "reservada"
+            },
+            {
                 "nombre": "main",
                 "palabra": "main",
                 "tipo": "reservada"
