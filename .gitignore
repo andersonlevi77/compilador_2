@@ -6,8 +6,6 @@
 
 # Carpeta de compilación de NetBeans
 private.xml
-target/
-
 
 # Archivos privados de NetBeans
 nb-configuration.xml
