@@ -1,1 +1,1 @@
-<id , asdsad>
+<reservada , double><id , x><simbolo , =><valor , 2.2><delimitador , ;>
