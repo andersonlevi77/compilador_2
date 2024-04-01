@@ -9,7 +9,7 @@ public class PilaSimbolos {
     private class Nodo {
 
         char valor; //elemento que tiene el nodo
-        Nodo siguiente;
+        Nodo anterior;
     }
     
     private Nodo ultimoNodoIngresado; //ultimo nodo ingresado
@@ -23,10 +23,10 @@ public class PilaSimbolos {
         Nodo nuevoNodo = new Nodo();
         nuevoNodo.valor = valor;
         if (ultimoNodoIngresado == null) {
-            nuevoNodo.siguiente = null;
+            nuevoNodo.anterior = null;
             ultimoNodoIngresado = nuevoNodo;
         } else {
-            nuevoNodo.siguiente = ultimoNodoIngresado;
+            nuevoNodo.anterior = ultimoNodoIngresado;
             ultimoNodoIngresado = nuevoNodo;
         }
     }
@@ -35,7 +35,7 @@ public class PilaSimbolos {
     public char extraer() {
         if (ultimoNodoIngresado != null) {
             char informacion = ultimoNodoIngresado.valor; //contiene el simbolo
-            ultimoNodoIngresado = ultimoNodoIngresado.siguiente; //apuntar al siguiente nodo
+            ultimoNodoIngresado = ultimoNodoIngresado.anterior; //apuntar al siguiente nodo
             return informacion;
         } else {
             return Character.MAX_VALUE;
