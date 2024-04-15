@@ -1,1 +1,1 @@
-<reservada , double><id , x><simbolo , =><valor , 2.2><delimitador , ;>
+<reservada , int><id , x><simbolo , =><valor , 0><delimitador , ;>

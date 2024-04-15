@@ -109,7 +109,6 @@ public class Tokens {
             tokens.add(token + "°" + numeroLinea + "¬" + numeroColumna);
             numeroColumna++;
         }
-        //Envia los tokens
         return tokens;
     }
 }
