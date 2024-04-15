@@ -34,7 +34,6 @@ target/
 
 # Archivos privados y de configuración de NetBeans
 nbactions.xml
-
 # Carpetas de respaldo y archivos temporales
 backup*/
 *.bak
