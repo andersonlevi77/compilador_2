@@ -15,7 +15,7 @@ public class tablaContextos extends javax.swing.JFrame {
     public tablaContextos() {
         initComponents();
         this.setLocationRelativeTo(null);
-        this.setTitle("Contextos");
+        this.setTitle("CONTEXTOS");
         this.setResizable(false);
         tablaCtx = new DefaultTableModel();
         String[] titulo = new String[]{"Tipo", "Variable", "Contexto", "Valor"};
@@ -28,12 +28,12 @@ public class tablaContextos extends javax.swing.JFrame {
      * Metodo para agregar datos a la tabla.
      *
      * @param tipo
-     * @param simbolo
+     * @param variable
      * @param contexto
      * @param valor
      */
-    public void agregarTabla(String tipo, String simbolo, int contexto, String valor) {
-        tablaCtx.addRow(new Object[]{tipo, simbolo, contexto, valor});
+    public void agregarTabla(String tipo, String variable, int contexto, String valor) {
+        tablaCtx.addRow(new Object[]{tipo, variable, contexto, valor});
     }
 
     @SuppressWarnings("unchecked")
