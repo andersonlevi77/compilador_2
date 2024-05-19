@@ -26,12 +26,12 @@ public class Semantico {
     /**
      * Constructor de la clase Semantico.
      *
-     * @param vista Referencia a la interfaz de la tabla de contextos para
+     * @param vista_tblC Referencia a la interfaz de la tabla de contextos para
      * visualización.
      */
-    public Semantico(tablaContextos vista) {
+    public Semantico(tablaContextos vista_tblC) {
         this.gestionContextos = new Contextos();
-        this.vistaTablaContextos = vista;
+        this.vistaTablaContextos = vista_tblC;
     }
 
     /**
@@ -43,23 +43,23 @@ public class Semantico {
      */
     private void registrarVariable(String[] token, String valorAsig) throws Exception {
         String tipo = token[0];
-        String valor = token[1];
+        String variable = token[1];
 
-        int contextoActual = contextoVariables.getOrDefault(valor, 0); // Obtiene el contexto actual de la variable
+        int contextoActual = contextoVariables.getOrDefault(variable, 0); // Obtiene el contexto actual de la variable
 
         if (contextoCero) {//Se detecta el contexto 0
             contextoActual = 0;
         }
 
         // Crear una nueva instancia de VariableInfo con los datos de la variable
-        VariableInfo info = new VariableInfo(tipo, valor, contextoActual, valorAsig);
+        VariableInfo info = new VariableInfo(tipo, variable, contextoActual, valorAsig);
 
         // Registra la variable en el contexto actual. 
         // Si la variable ya está declarada en este contexto, el método 'declararVariable' lanzará una excepción.
-        gestionContextos.declarar_ComprobarVariable(valor, info);
+        gestionContextos.declarar_ComprobarVariable(variable, info);
 
         // Agregar la información de la variable a la tabla de contextos.
-        vistaTablaContextos.agregarTabla(tipo, valor, contextoActual, valorAsig);
+        vistaTablaContextos.agregarTabla(tipo, variable, contextoActual, valorAsig);
         //System.out.println("Variable " + valor + " declarada en el contexto número: " + contextoActual);
     }
 
@@ -128,7 +128,7 @@ public class Semantico {
                     if (!asigVariable && tokenAnt != null) { //si no hay un valo asignado a la variable lo deja vacio 
                         manejoContextos(); //actualiza el contexto de la variable
                         registrarVariable(tokenAnt, ""); //registra la variable
-                        throw new Errores("Variable '" + tokenAnt[1] + "' No inicializada");
+                        throw new Errores("Variable '" + tokenAnt[1] + "' No esta inicializada");
 
                     }
                     tokenAnt = null;
