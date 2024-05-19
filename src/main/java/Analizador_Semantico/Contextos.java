@@ -50,7 +50,7 @@ public class Contextos {
     public boolean declarar_ComprobarVariable(String id, VariableInfo info) throws Exception {
         HashMap<String, VariableInfo> currentContext = contextStack.peek();
         if (currentContext.containsKey(id)) {
-            throw new Errores("La variable '" + id + "' ya esta declarada en un contexto");
+            throw new Errores("La variable '" + id + "' ya esta declarada en un Contexto");
         }
         currentContext.put(id, info);
         return true;
