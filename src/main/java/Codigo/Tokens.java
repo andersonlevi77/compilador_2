@@ -1,6 +1,6 @@
 package Codigo;
 
-import Excepciones.tokensNoPermitidos;
+import Excepciones.Errores;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -20,7 +20,7 @@ import org.json.simple.parser.JSONParser;
 public class Tokens {
 
     //método para descartar las palabras reservadas con caracteres incorrectos
-    public void detectarCaracteresIncorrectosRW(String texto) throws tokensNoPermitidos {
+    public void detectarCaracteresIncorrectosRW(String texto) throws Errores {
         // Leer archivo JSON
         JSONParser jsonParser = new JSONParser();
         try (FileReader read = new FileReader("reservadas.json")) {
@@ -53,7 +53,7 @@ public class Tokens {
                             // Reservada correcta
                             String resultado = String.join("", partesReservada);
                             //lanza el aviso
-                            throw new tokensNoPermitidos("<html><b>" + token + "</b> es incorrecto, sugerencia: <b>" + resultado + "</b>");
+                            throw new Errores("<html><b>" + token + "</b> es incorrecto, sugerencia: <b>" + resultado + "</b>");
                         }
                     }
                 }
@@ -67,7 +67,7 @@ public class Tokens {
         }
     }
 
-    public ArrayList<String> separacionTokens(String texto) throws tokensNoPermitidos {
+    public ArrayList<String> separacionTokens(String texto) throws Errores {
         //Crea una lista para almacenar los tokens
         ArrayList<String> tokens = new ArrayList<>();
         // Detecta los tokens establecidos a base de una expresión regular
