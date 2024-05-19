@@ -12,7 +12,7 @@ package Analizador_Semantico;
 public class VariableInfo {
 
     private String tipo;    // Tipo de dato de la variable, como "int", "String", etc.
-    private String valor; // Valor inicial de la variable
+    private String variable;   // Valor inicial de la variable
     private int contexto;   // Número del contexto en el que la variable es declarada.
     private String asignacion;
 
@@ -20,13 +20,13 @@ public class VariableInfo {
      * Constructor para crear una nueva VariableInfo.
      *
      * @param tipo El tipo de la variable.
-     * @param valor El valor inicial de la variable.
+     * @param variable El valor inicial de la variable.
      * @param contextoInicial El contexto en el que la variable es declarada.
      * @param asignacion El valor asignado a la variable.
      */
-    public VariableInfo(String tipo, String valor, int contextoInicial, String asignacion) {
+    public VariableInfo(String tipo, String variable, int contextoInicial, String asignacion) {
         this.tipo = tipo;
-        this.valor = valor;
+        this.variable = variable;
         this.contexto = contextoInicial;
         this.asignacion = asignacion;
     }
@@ -63,7 +63,7 @@ public class VariableInfo {
      * @return Valor inicial de la variable.
      */
     public String getValor() {
-        return valor;
+        return variable;
     }
 
     /**
@@ -72,7 +72,7 @@ public class VariableInfo {
      * @param valor El nuevo valor de la variable.
      */
     public void setValor(String valor) {
-        this.valor = valor;
+        this.variable = valor;
     }
 
     /**
