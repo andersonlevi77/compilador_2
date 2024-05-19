@@ -73,12 +73,12 @@ public class Interfaz extends javax.swing.JFrame {
         reservadasEsc.detectarCaracteresIncorrectosRW(txtDatos.getText());
         ArrayList<String> listaTokens = reservadasEsc.separacionTokens(txtDatos.getText());
 
-        System.out.println("tk: " + listaTokens); //imprimir listaTokens
+        System.out.println("TK: " + listaTokens); //imprimir listaTokens
 
         //Itera sobre cada token y lo separa por cada separador que encuentre
         for (String tokenLinea : listaTokens) {
             String[] partes = tokenLinea.split("\\°|\\¬"); // Divide el token, el número de línea y número de columna
-            System.out.println("tokens: " + Arrays.toString(partes)); //imprime los tokens
+            System.out.println("Tokens: " + Arrays.toString(partes)); //imprime los tokens
             String token = partes[0];
             int numeroLinea = Integer.parseInt(partes[1]);
             int numeroColumna = Integer.parseInt(partes[2]);

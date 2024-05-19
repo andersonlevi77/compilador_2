@@ -89,7 +89,6 @@ public class Tokens {
 
         while (matcher.find()) {
             String token = matcher.group();
-
             // Ignora los comentarios para añadirlos al array
             if (token.startsWith("//") || token.startsWith("/*")) {
                 // Ajusta el número de línea para comentarios de bloque que contienen saltos de línea
@@ -98,7 +97,6 @@ public class Tokens {
                 }
                 continue; // No agregar comentarios al array
             }
-
             // Ajuste específico para saltos de línea
             if (token.matches("\\n+")) {
                 numeroLinea += token.length(); // Cuenta cada salto de línea individualmente
